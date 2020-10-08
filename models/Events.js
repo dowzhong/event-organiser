@@ -5,7 +5,7 @@ module.exports = (sequelize, datatypes) => {
             allowNull: false,
             unique: true
         },
-        time: {
+        date: {
             type: datatypes.DATE,
             allowNull: false
         }
