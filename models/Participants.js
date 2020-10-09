@@ -3,6 +3,9 @@ module.exports = (sequelize, datatypes) => {
         id: {
             type: datatypes.STRING,
             primaryKey: true
+        },
+        decision: {
+            type: datatypes.ENUM('Going', 'Not Going', 'Unsure')
         }
     });
 }

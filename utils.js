@@ -19,11 +19,9 @@ module.exports = {
 
         const date = this.localToServerTime(unparsedDate, dbGuild.utc_offset);
 
-        // const date = new Date(unparsedDate.getTime());
-        // date.setHours(date.getHours() + date.getTimezoneOffset() / 60 + dbGuild.utc_offset);
         const event = await database.Events.create({
-            name,
-            description,
+            name: name.trim(),
+            description: description.trim(),
             date,
         });
         return event;
@@ -54,15 +52,25 @@ module.exports = {
     },
     async createEventPost(guild, event) {
         const [dbGuild] = await this.getGuild(guild.id);
+        
+            
+        const question = guild.client.emojis.cache.find(emoji => emoji.name === 'question');
+        const cross = guild.client.emojis.cache.find(emoji => emoji.name === 'cross');
+        const tick = guild.client.emojis.cache.find(emoji => emoji.name === 'tick');
+
         return new MessageEmbed()
             .setColor(0x99EEBB)
-            .setTitle(`${event.name} on ${this.serverToLocalTime(event.date, dbGuild.utc_offset).toLocaleString('en-GB')}`)
+            .setTitle(event.name)
             .setDescription(event.description)
+            .addField('Time', this.serverToLocalTime(event.date, dbGuild.utc_offset).toLocaleString('en-GB'))
+            .addField(`${tick} Going`, 'placeholder', true)
+            .addField(`${cross} Not Going`, 'placeholder', true)
+            .addField(`${question} Unsure`, 'placeholder', true)
             .setTimestamp();
     },
     localToServerTime(date, utc) {
         const serverTime = new Date(date.getTime());
-        serverTime.setHours(serverTime.getHours() + serverTime.getTimezoneOffset() / 60 + utc);
+        serverTime.setHours(serverTime.getHours() - utc - serverTime.getTimezoneOffset() / 60);
         return serverTime;
     },
     serverToLocalTime(date, utc) {

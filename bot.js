@@ -52,7 +52,6 @@ client.on('message', async message => {
             const date = new Date();
             date.setFullYear(Number(year), Number(month) - 1, Number(day));
             date.setHours(hour, minute, 0, 0);
-
             await message.channel.send('Please give a short description of the event.')
                 .catch(err => { });
 
@@ -63,13 +62,22 @@ client.on('message', async message => {
             });
 
             const event = await utils.createEvent(message.guild, eventName, descriptionReply.first().content, date);
-
             const allEventsChannel = message.guild.channels.cache.find(channel => {
                 return channel.parent
                     && channel.parent.name === 'Organized Events'
                     && channel.name === 'all-events'
             });
-            allEventsChannel.send({ embed: await utils.createEventPost(message.guild, event) });
+
+            const question = client.emojis.cache.find(emoji => emoji.name === 'question');
+            const cross = client.emojis.cache.find(emoji => emoji.name === 'cross');
+            const tick = client.emojis.cache.find(emoji => emoji.name === 'tick');
+            const bin = client.emojis.cache.find(emoji => emoji.name === 'bin');
+
+            const eventPost = await allEventsChannel.send({ embed: await utils.createEventPost(message.guild, event) });
+            await eventPost.react(tick);
+            await eventPost.react(cross);
+            await eventPost.react(question);
+            await eventPost.react(bin);
         } catch (err) {
             if (err instanceof Discord.Collection) {
                 message.reply('event creation expired after inactivity.').catch(err => { });
