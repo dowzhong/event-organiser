@@ -22,7 +22,7 @@ client.on('raw', async event => {
 
     const message = await channel.messages.fetch(data.message_id);
 
-    const emojiKey = (data.emoji.id) ? `${data.emoji.name}:${data.emoji.id}` : data.emoji.name;
+    const emojiKey = data.emoji.id || data.emoji.name;
     const reaction = message.reactions.cache.get(emojiKey);
 
     client.emit(config.rawEvents[event.t], reaction, user);
@@ -80,6 +80,7 @@ client.on('message', async message => {
             });
 
             const event = await utils.createEvent(message.guild, eventName, descriptionReply.first().content, date);
+
             const allEventsChannel = message.guild.channels.cache.find(channel => {
                 return channel.parent
                     && channel.parent.name === 'Organized Events'
@@ -92,7 +93,7 @@ client.on('message', async message => {
             const bin = client.emojis.cache.find(emoji => emoji.name === 'bin');
 
             const eventPost = await allEventsChannel.send({ embed: await utils.createEventPost(message.guild, event) });
-            
+
             await utils.storeEventPost(eventPost, event);
 
             await eventPost.react(tick);
@@ -129,8 +130,22 @@ client.on('message', async message => {
     }
 });
 
-client.on('messageReactionAdd', (reaction, user) => {
+client.on('messageReactionAdd', async (reaction, user) => {
+    if (user.bot || !reaction.message.guild) return;
 
+    const correspondingEvent = await redis.getAsync(reaction.message.id);
+    if (correspondingEvent !== null) {
+        if (!config.emojiDecision[reaction.emoji.name]) return;
+
+        const [event] = await utils.getEvent({ id: correspondingEvent });
+        await event.addParticipant(user.id, config.emojiDecision[reaction.emoji.name]);
+        await event.reload();
+        console.log(event.participants)
+        console.log(event.participants.map(p => p.eventParticipants));
+
+        reaction.message.edit({ embed: await utils.createEventPost(reaction.message.guild, event) });
+        reaction.users.remove(user.id);
+    }
 });
 
 client.on('messageReactionRemove', (reaction, user) => {

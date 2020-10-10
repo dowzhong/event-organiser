@@ -13,7 +13,8 @@ module.exports = {
     },
     getEvent(query) {
         return database.Events.findAll({
-            where: query
+            where: query,
+            include: 'participants',
         });
     },
     async createEvent(guild, name, description, unparsedDate) {
@@ -27,6 +28,7 @@ module.exports = {
             date,
         });
         await event.setGuild(dbGuild);
+        await event.setDataValue('participants', await event.getParticipants());
         return event;
     },
     async createEventChannels(guild) {
@@ -56,18 +58,22 @@ module.exports = {
     async createEventPost(guild, event) {
         const [dbGuild] = await this.getGuild(guild.id);
 
-        const question = guild.client.emojis.cache.find(emoji => emoji.name === 'question');
-        const cross = guild.client.emojis.cache.find(emoji => emoji.name === 'cross');
-        const tick = guild.client.emojis.cache.find(emoji => emoji.name === 'tick');
+        const question = this.findEmojiByName(guild.client, 'question');
+        const cross = this.findEmojiByName(guild.client, 'cross');
+        const tick = this.findEmojiByName(guild.client, 'tick');
+
+        const going = await this.getNicknameFromParticipants(guild, this.filterParticipants(event, 'Going'))
+        const notGoing = await this.getNicknameFromParticipants(guild, this.filterParticipants(event, 'Not Going'))
+        const unsure = await this.getNicknameFromParticipants(guild, this.filterParticipants(event, 'Unsure'))
 
         return new MessageEmbed()
             .setColor(0x99EEBB)
             .setTitle(event.name)
             .setDescription(event.description)
             .addField('Time', this.serverToLocalTime(event.date, dbGuild.utc_offset).toLocaleString('en-GB'))
-            .addField(`${tick} Going`, 'placeholder', true)
-            .addField(`${cross} Not Going`, 'placeholder', true)
-            .addField(`${question} Unsure`, 'placeholder', true)
+            .addField(`${tick} Going`, going.join('\n') || '-', true)
+            .addField(`${cross} Not Going`, notGoing.join('\n') || '-', true)
+            .addField(`${question} Unsure`, unsure.join('\n') || '-', true)
             .setTimestamp();
     },
     localToServerTime(date, utc) {
@@ -87,5 +93,29 @@ module.exports = {
         });
         await redis.setAsync(message.id, event.id);
         return post;
+    },
+    findEmojiByName(client, name) {
+        return client.emojis.cache.find(emoji => emoji.name === name);
+    },
+    filterParticipants(event, status) {
+        return event.getDataValue('participants').filter(participant => participant.eventParticipants.decision === status);
+    },
+    async getNicknameFromParticipants(guild, participants) {
+        const nicknames = await Promise.all(
+            participants.map(p => {
+                return this.getNicknameFromId(guild, p.id).catch(err => null);
+            })
+        );
+        return nicknames.filter(Boolean);
+    },
+    async getNicknameFromId(guild, id) {
+        try {
+            const member = await guild.members.fetch(id);
+            return member.displayName;
+        } catch (err) {
+            if (err.httpStatu === 404)
+                return null;
+            throw err;
+        }
     }
 }
