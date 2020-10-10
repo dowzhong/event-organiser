@@ -12,6 +12,8 @@ module.exports = {
     redisPrefix: 'eventBot',
     colors: {
         active: 0x99EEBB,
-        expired: 0x2c2f33
-    }
+        expired: 0x2c2f33,
+        example: 0xC0C0C0
+    },
+    botMessageTimeout: 1000 * 60 * 2
 };
