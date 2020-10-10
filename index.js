@@ -12,8 +12,8 @@ async function init() {
         include: 'participants'
     });
     futureEvents.forEach(event => {
-        setTimeout(async () => {
-            utils.expireEvent(await client.guilds.fetch(event.guildId), event)
+        utils.longTimeout(async () => {
+            utils.expireEvent(await client.guilds.fetch(event.guildId), event.id)
                 .catch(err => console.error(`Could not expire event ${event.id}`, err));
         }, event.date - Date.now() + 1000 * 60 * 60 * 24);
     });

@@ -10,8 +10,9 @@ const client = new Discord.Client();
 
 const awaitingMessage = new Set();
 
-client.on('ready', () => {
+client.on('ready', async () => {
     console.log(`Logged in as ${client.user.tag}!`);
+    console.log(await client.generateInvite(8));
 });
 
 client.on('raw', async event => {
@@ -47,10 +48,10 @@ client.on('message', async message => {
             return;
         }
 
-        const eventName = args.join(' ');
+        const eventName = args.join(' ').trim();
 
-        const conflictingEvents = await utils.getEvent({ name: eventName });
-        if (conflictingEvents.length) {
+        const conflictingEvent = await utils.getEvent({ name: eventName, guildId: message.guild.id });
+        if (conflictingEvent) {
             message.reply('An event with that name is already scheduled.');
             return;
         }
@@ -101,15 +102,14 @@ client.on('message', async message => {
 
             const statusMsg = await message.reply('*Creating event...*');
             const event = await utils.createEvent(message.guild, eventName, descriptionReply.first().content, date);
-            await Promise.all([
-                createGuildEvent(message.guild, event, descriptionReply.first().content, date),
-                createEventRoles(message.guild, event).catch(err => console.error('Could not create event role', eventName, err))
-            ])
+
+            await createEventRoles(message.guild, event).catch(err => console.error('Could not create event role', eventName, err));
+            await createGuildEvent(message.guild, event, descriptionReply.first().content, date);
 
             statusMsg.edit(`${message.author}, New event ***${event.name}*** created!`).catch(err => { });
         } catch (err) {
             awaitingMessage.delete(message.author.id);
-
+            utils.deleteEvent({ guildId: message.guild.id, name: eventName }).catch(err => { });
             if (err instanceof Discord.Collection) {
                 message.reply('event creation expired after inactivity.').catch(err => { });
                 return;
@@ -118,7 +118,7 @@ client.on('message', async message => {
                 message.reply('An event with that name is already scheduled.');
                 return;
             }
-            message.reply('An unknown error occured: ' + err.message);
+            message.reply('An error occured: ' + err.message);
             console.error(err);
         }
     }
@@ -141,13 +141,12 @@ client.on('messageReactionAdd', async (reaction, user) => {
     const correspondingEvent = await redis.getAsync(reaction.message.id);
     if (correspondingEvent === null) return;
 
-    const [event] = await utils.getEvent({ id: correspondingEvent });
+    const event = await utils.getEvent({ id: correspondingEvent });
 
     if (!event) {
         await redis.delAsync(reaction.message.id);
         return;
     }
-
     if (event.date > Date.now()) {
         if (reaction.emoji.name === 'bin') {
             await event.removeParticipant(user.id);
@@ -197,8 +196,8 @@ async function createGuildEvent(guild, event) {
 
     await utils.storeEventPost(eventPost, event);
 
-    setTimeout(() => {
-        utils.expireEvent(guild, event).catch(err => console.error(`Could not expire event ${event.id} `, err));
+    utils.longTimeout(() => {
+        utils.expireEvent(guild, event.id).catch(err => console.error(`Could not expire event ${event.id} `, err));
     }, event.date - Date.now() + 1000 * 60 * 60 * 24);
 
     await eventPost.react(tick);

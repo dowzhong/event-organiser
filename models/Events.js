@@ -2,8 +2,7 @@ module.exports = (sequelize, datatypes) => {
     return sequelize.define('events', {
         name: {
             type: datatypes.STRING,
-            allowNull: false,
-            unique: true
+            allowNull: false
         },
         description: {
             type: datatypes.STRING(2000),

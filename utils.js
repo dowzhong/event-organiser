@@ -13,12 +13,20 @@ module.exports = {
         });
     },
     getEvent(query) {
-        return database.Events.findAll({
+        return database.Events.findOne({
             where: query,
             include: 'participants',
         });
     },
-    async expireEvent(guild, event) {
+    deleteEvent(query) {
+        return database.Events.destroy({
+            where: query
+        });
+    },
+    async expireEvent(guild, eventId) {
+        const event = await this.getEvent({ id: eventId });
+        if (!event) return;
+
         event.expired = true;
         await event.save();
 
@@ -170,5 +178,19 @@ module.exports = {
         if (string.length <= length) return string;
 
         return string.slice(0, length - 3) + '...';
+    },
+    longTimeout(fn, delay) {
+        const maxDelay = Math.pow(2, 31) - 1;
+
+        if (delay > maxDelay) {
+            var args = arguments;
+            args[1] -= maxDelay;
+
+            return setTimeout(function () {
+                setTimeout_.apply(undefined, args);
+            }, maxDelay);
+        }
+
+        return setTimeout.apply(undefined, arguments);
     }
 }
