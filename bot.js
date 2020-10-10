@@ -140,8 +140,6 @@ client.on('messageReactionAdd', async (reaction, user) => {
         const [event] = await utils.getEvent({ id: correspondingEvent });
         await event.addParticipant(user.id, config.emojiDecision[reaction.emoji.name]);
         await event.reload();
-        console.log(event.participants)
-        console.log(event.participants.map(p => p.eventParticipants));
 
         reaction.message.edit({ embed: await utils.createEventPost(reaction.message.guild, event) });
         reaction.users.remove(user.id);

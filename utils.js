@@ -62,9 +62,9 @@ module.exports = {
         const cross = this.findEmojiByName(guild.client, 'cross');
         const tick = this.findEmojiByName(guild.client, 'tick');
 
-        const going = await this.getNicknameFromParticipants(guild, this.filterParticipants(event, 'Going'))
-        const notGoing = await this.getNicknameFromParticipants(guild, this.filterParticipants(event, 'Not Going'))
-        const unsure = await this.getNicknameFromParticipants(guild, this.filterParticipants(event, 'Unsure'))
+        const going = await this.getNicknamesByDecision(guild, event, 'Going');
+        const notGoing = await this.getNicknamesByDecision(guild, event, 'Not Going');
+        const unsure = await this.getNicknamesByDecision(guild, event, 'Unsure');
 
         return new MessageEmbed()
             .setColor(0x99EEBB)
@@ -99,6 +99,10 @@ module.exports = {
     },
     filterParticipants(event, status) {
         return event.getDataValue('participants').filter(participant => participant.eventParticipants.decision === status);
+    },
+    getNicknamesByDecision(guild, event, decision) {
+        const participants = event.participants.filter(participant => participant.eventParticipants.decision === decision);
+        return this.getNicknameFromParticipants(guild, participants);
     },
     async getNicknameFromParticipants(guild, participants) {
         const nicknames = await Promise.all(
