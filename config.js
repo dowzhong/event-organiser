@@ -9,5 +9,9 @@ module.exports = {
         cross: 'Not Going',
         question: 'Unsure'
     },
-    redisPrefix: 'eventBot'
+    redisPrefix: 'eventBot',
+    colors: {
+        active: 0x99EEBB,
+        expired: 0x2c2f33
+    }
 };

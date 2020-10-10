@@ -1,3 +1,4 @@
+const config = require('./config.js');
 const database = require('./database.js');
 const { Permissions, MessageEmbed } = require('discord.js');
 
@@ -66,8 +67,10 @@ module.exports = {
         const notGoing = await this.getNicknamesByDecision(guild, event, 'Not Going');
         const unsure = await this.getNicknamesByDecision(guild, event, 'Unsure');
 
+        const expired = event.date > Date.now();
+
         return new MessageEmbed()
-            .setColor(0x99EEBB)
+            .setColor(expired ? config.colors.active : config.colors.expired)
             .setTitle(event.name)
             .setDescription(event.description)
             .addField('Time', this.serverToLocalTime(event.date, dbGuild.utc_offset).toLocaleString('en-GB'))
