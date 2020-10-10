@@ -56,7 +56,6 @@ module.exports = {
     async createEventPost(guild, event) {
         const [dbGuild] = await this.getGuild(guild.id);
 
-
         const question = guild.client.emojis.cache.find(emoji => emoji.name === 'question');
         const cross = guild.client.emojis.cache.find(emoji => emoji.name === 'cross');
         const tick = guild.client.emojis.cache.find(emoji => emoji.name === 'tick');

@@ -139,6 +139,4 @@ client.on('messageReactionRemove', (reaction, user) => {
 
 client.on('error', err => { });
 
-
-
 client.login(process.env.DISCORD_TOKEN);
