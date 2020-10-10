@@ -139,7 +139,6 @@ client.on('messageReactionAdd', async (reaction, user) => {
     const [event] = await utils.getEvent({ id: correspondingEvent });
 
     if (!event) {
-        console.log('ah')
         await redis.delAsync(reaction.message.id);
         return;
     }
