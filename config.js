@@ -8,5 +8,6 @@ module.exports = {
         tick: 'Going',
         cross: 'Not Going',
         question: 'Unsure'
-    }
+    },
+    redisPrefix: 'eventBot'
 };

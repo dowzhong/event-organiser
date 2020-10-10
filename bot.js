@@ -87,10 +87,10 @@ client.on('message', async message => {
                     && channel.name === 'all-events'
             });
 
-            const question = client.emojis.cache.find(emoji => emoji.name === 'question');
-            const cross = client.emojis.cache.find(emoji => emoji.name === 'cross');
-            const tick = client.emojis.cache.find(emoji => emoji.name === 'tick');
-            const bin = client.emojis.cache.find(emoji => emoji.name === 'bin');
+            const question = utils.findEmojiByName(client, 'question');
+            const cross = utils.findEmojiByName(client, 'cross');
+            const tick = utils.findEmojiByName(client, 'tick');
+            const bin = utils.findEmojiByName(client, 'bin');
 
             const eventPost = await allEventsChannel.send({ embed: await utils.createEventPost(message.guild, event) });
 
@@ -134,20 +134,28 @@ client.on('messageReactionAdd', async (reaction, user) => {
     if (user.bot || !reaction.message.guild) return;
 
     const correspondingEvent = await redis.getAsync(reaction.message.id);
-    if (correspondingEvent !== null) {
-        if (!config.emojiDecision[reaction.emoji.name]) return;
+    if (correspondingEvent === null) return;
 
-        const [event] = await utils.getEvent({ id: correspondingEvent });
-        await event.addParticipant(user.id, config.emojiDecision[reaction.emoji.name]);
-        await event.reload();
+    const [event] = await utils.getEvent({ id: correspondingEvent });
 
-        reaction.message.edit({ embed: await utils.createEventPost(reaction.message.guild, event) });
-        reaction.users.remove(user.id);
+    if (!event) {
+        console.log('ah')
+        await redis.delAsync(reaction.message.id);
+        return;
     }
-});
 
-client.on('messageReactionRemove', (reaction, user) => {
+    if (reaction.emoji.name === 'bin') {
+        await event.removeParticipant(user.id);
+    } else if (config.emojiDecision[reaction.emoji.name])
+        await event.addParticipant(user.id, config.emojiDecision[reaction.emoji.name]);
 
+
+    await event.reload();
+
+    reaction.message.edit({ embed: await utils.createEventPost(reaction.message.guild, event) }).catch(err => {
+        console.error('Could not edit embed after updating member decision', err);
+    });
+    reaction.users.remove(user.id).catch(err => { });
 });
 
 client.on('error', err => { });

@@ -29,6 +29,16 @@ Events.prototype.addParticipant = async function (id, decision) {
     return Events;
 }
 
+Events.prototype.deleteParticipant = async function (id, decision) {
+    const participant = await Participants.findOne({
+        where: { id }
+    });
+    if (!participant) return Event;
+
+    await this.removeParticipant(participant);
+    return Events;
+}
+
 module.exports = {
     EventPosts,
     Events,
