@@ -1,0 +1,29 @@
+{
+  "name": "event-organiser",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "discord.js": "^12.3.1",
+    "pg": "^8.4.0",
+    "pg-hstore": "^2.3.3",
+    "redis": "^3.0.2",
+    "sequelize": "^6.3.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cthuluhoop123/event-organiser.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cthuluhoop123/event-organiser/issues"
+  },
+  "homepage": "https://github.com/cthuluhoop123/event-organiser#readme"
+}
