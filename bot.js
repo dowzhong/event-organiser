@@ -1,13 +1,31 @@
 const config = require('./config.js');
 const utils = require('./utils.js');
 
+const redis = require('./redis.js');
+
 const Discord = require('discord.js');
-const { disconnect } = require('process');
 
 const client = new Discord.Client();
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
+});
+
+client.on('raw', async event => {
+    if (!config.rawEvents[event.t]) return;
+
+    const { d: data } = event;
+    const user = client.users.cache.get(data.user_id);
+    const channel = client.channels.cache.get(data.channel_id) || await user.createDM();
+
+    if (channel.messages.cache.has(data.message_id)) return;
+
+    const message = await channel.messages.fetch(data.message_id);
+
+    const emojiKey = (data.emoji.id) ? `${data.emoji.name}:${data.emoji.id}` : data.emoji.name;
+    const reaction = message.reactions.cache.get(emojiKey);
+
+    client.emit(config.rawEvents[event.t], reaction, user);
 });
 
 client.on('message', async message => {
@@ -74,6 +92,9 @@ client.on('message', async message => {
             const bin = client.emojis.cache.find(emoji => emoji.name === 'bin');
 
             const eventPost = await allEventsChannel.send({ embed: await utils.createEventPost(message.guild, event) });
+            
+            await utils.storeEventPost(eventPost, event);
+
             await eventPost.react(tick);
             await eventPost.react(cross);
             await eventPost.react(question);
@@ -108,6 +129,16 @@ client.on('message', async message => {
     }
 });
 
+client.on('messageReactionAdd', (reaction, user) => {
+
+});
+
+client.on('messageReactionRemove', (reaction, user) => {
+
+});
+
 client.on('error', err => { });
+
+
 
 client.login(process.env.DISCORD_TOKEN);

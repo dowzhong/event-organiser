@@ -1,6 +1,8 @@
 const database = require('./database.js');
 const { Permissions, MessageEmbed } = require('discord.js');
 
+const redis = require('./redis.js');
+
 module.exports = {
     getGuild(guildId) {
         return database.Guilds.findCreateFind({
@@ -24,6 +26,7 @@ module.exports = {
             description: description.trim(),
             date,
         });
+        await event.setGuild(dbGuild);
         return event;
     },
     async createEventChannels(guild) {
@@ -52,8 +55,8 @@ module.exports = {
     },
     async createEventPost(guild, event) {
         const [dbGuild] = await this.getGuild(guild.id);
-        
-            
+
+
         const question = guild.client.emojis.cache.find(emoji => emoji.name === 'question');
         const cross = guild.client.emojis.cache.find(emoji => emoji.name === 'cross');
         const tick = guild.client.emojis.cache.find(emoji => emoji.name === 'tick');
@@ -77,5 +80,13 @@ module.exports = {
         const localised = new Date(date.getTime());
         localised.setHours(localised.getHours() + localised.getTimezoneOffset() / 60 + utc);
         return localised;
+    },
+    async storeEventPost(message, event) {
+        const post = await database.EventPosts.create({
+            id: message.id,
+            eventId: event.id
+        });
+        await redis.setAsync(message.id, event.id);
+        return post;
     }
 }
