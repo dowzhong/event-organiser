@@ -18,11 +18,28 @@ module.exports = {
             include: 'participants',
         });
     },
+    async expireEvent(guild, event) {
+        event.expired = true;
+        await event.save();
+
+        try {
+            const eventRole = await guild.roles.fetch(event.roleId);
+            await eventRole.delete('Event expired.');
+        } catch (err) { }
+
+        const { allEvents } = this.getEventsChannels(guild);
+        if (!allEvents) return;
+
+        const post = await event.getEventPost();
+
+        const postedEvent = await allEvents.messages.fetch(post.id);
+        if (!postedEvent) return;
+
+        postedEvent.edit({ embed: await this.createEventPost(guild, event) });
+    },
     async createEvent(guild, name, description, unparsedDate) {
         const [dbGuild] = await this.getGuild(guild.id);
-
         const date = this.localToServerTime(unparsedDate, dbGuild.utc_offset);
-
         const event = await database.Events.create({
             name: name.trim(),
             description: description.trim(),
@@ -37,7 +54,7 @@ module.exports = {
             type: 'category',
             reason: 'Event organiser bot.'
         });
-        const eventsList = await guild.channels.create('All Events', {
+        const allEvents = await guild.channels.create('All Events', {
             type: 'text',
             parent: eventsCategory,
             topic: 'All events!',
@@ -48,6 +65,17 @@ module.exports = {
             }],
             reason: 'Event organiser bot.'
         });
+        const eventTalk = await guild.channels.create('event-talk', {
+            type: 'text',
+            parent: eventsCategory,
+            topic: 'Discuss and talk about upcoming/past events.',
+            reason: 'Event organiser bot.'
+        });
+
+        return {
+            allEvents,
+            eventTalk
+        };
     },
     setGuildUTCTimezone(guild, utc) {
         return database.Guilds.update({ utc_offset: utc }, {
@@ -67,10 +95,10 @@ module.exports = {
         const notGoing = await this.getNicknamesByDecision(guild, event, 'Not Going');
         const unsure = await this.getNicknamesByDecision(guild, event, 'Unsure');
 
-        const expired = event.date > Date.now();
+        const expired = event.date < Date.now();
 
         return new MessageEmbed()
-            .setColor(expired ? config.colors.active : config.colors.expired)
+            .setColor(expired ? config.colors.expired : config.colors.active)
             .setTitle(event.name)
             .setDescription(event.description)
             .addField('Time', this.serverToLocalTime(event.date, dbGuild.utc_offset).toLocaleString('en-GB'))
@@ -120,9 +148,27 @@ module.exports = {
             const member = await guild.members.fetch(id);
             return member.displayName;
         } catch (err) {
-            if (err.httpStatu === 404)
+            if (err.httpStatus === 404)
                 return null;
             throw err;
         }
+    },
+    getEventsChannels(guild) {
+        return {
+            allEvents: this.getOrganizedEventsChannel(guild, 'all-events'),
+            eventTalk: this.getOrganizedEventsChannel(guild, 'event-talk')
+        };
+    },
+    getOrganizedEventsChannel(guild, name) {
+        return guild.channels.cache.find(channel => {
+            return channel.parent
+                && channel.parent.name === 'Organized Events'
+                && channel.name === name
+        });
+    },
+    truncate(string, length = 30) {
+        if (string.length <= length) return string;
+
+        return string.slice(0, length - 3) + '...';
     }
 }

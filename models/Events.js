@@ -6,8 +6,16 @@ module.exports = (sequelize, datatypes) => {
             unique: true
         },
         description: {
-            type: datatypes.STRING,
+            type: datatypes.STRING(2000),
             allowNull: false
+        },
+        roleId: {
+            type: datatypes.STRING
+        },
+        expired: {
+            type: datatypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
         },
         date: {
             type: datatypes.DATE,

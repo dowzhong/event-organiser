@@ -7,6 +7,8 @@ const Discord = require('discord.js');
 
 const client = new Discord.Client();
 
+const awaitingMessage = new Set();
+
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
 });
@@ -29,7 +31,10 @@ client.on('raw', async event => {
 });
 
 client.on('message', async message => {
-    if (message.author.bot || !message.guild || !message.content.startsWith(config.prefix))
+    if (message.author.bot
+        || !message.guild
+        || !message.content.startsWith(config.prefix)
+        || awaitingMessage.has(message.author.id))
         return;
 
     const args = message.content.split(' ');
@@ -50,6 +55,7 @@ client.on('message', async message => {
         }
 
         try {
+            awaitingMessage.add(message.author.id);
             await message.channel.send('At what time would this event be occuring?' +
                 ' *Please format as DD/MM/YYYY HH:MM (24 hour time)*')
                 .catch(err => { });
@@ -79,28 +85,14 @@ client.on('message', async message => {
                 errors: ['time']
             });
 
+            awaitingMessage.delete(message.author.id);
+
             const event = await utils.createEvent(message.guild, eventName, descriptionReply.first().content, date);
-
-            const allEventsChannel = message.guild.channels.cache.find(channel => {
-                return channel.parent
-                    && channel.parent.name === 'Organized Events'
-                    && channel.name === 'all-events'
-            });
-
-            const question = utils.findEmojiByName(client, 'question');
-            const cross = utils.findEmojiByName(client, 'cross');
-            const tick = utils.findEmojiByName(client, 'tick');
-            const bin = utils.findEmojiByName(client, 'bin');
-
-            const eventPost = await allEventsChannel.send({ embed: await utils.createEventPost(message.guild, event) });
-
-            await utils.storeEventPost(eventPost, event);
-
-            await eventPost.react(tick);
-            await eventPost.react(cross);
-            await eventPost.react(question);
-            await eventPost.react(bin);
+            await createGuildEvent(message.guild, event, descriptionReply.first().content, date);
+            await createEventRoles(message.guild, event).catch(err => console.error('Could not create event role', eventName, err));
         } catch (err) {
+            awaitingMessage.delete(message.author.id);
+
             if (err instanceof Discord.Collection) {
                 message.reply('event creation expired after inactivity.').catch(err => { });
                 return;
@@ -124,10 +116,6 @@ client.on('message', async message => {
             console.error(err);
         }
     }
-
-    if (command === 'setup') {
-        utils.createEventChannels(message.guild);
-    }
 });
 
 client.on('messageReactionAdd', async (reaction, user) => {
@@ -143,20 +131,76 @@ client.on('messageReactionAdd', async (reaction, user) => {
         return;
     }
 
-    if (reaction.emoji.name === 'bin') {
-        await event.removeParticipant(user.id);
-    } else if (config.emojiDecision[reaction.emoji.name])
-        await event.addParticipant(user.id, config.emojiDecision[reaction.emoji.name]);
+    if (event.date > Date.now()) {
+        if (reaction.emoji.name === 'bin') {
+            await event.removeParticipant(user.id);
+        } else if (config.emojiDecision[reaction.emoji.name]) {
+            await event.addParticipant(user.id, config.emojiDecision[reaction.emoji.name]);
+            if (event.roleId) {
+                try {
+                    const reactionMember = await reaction.message.guild.members.fetch(user.id);
+                    if (reaction.emoji.name === 'tick')
+                        await reactionMember.roles.add(event.roleId, 'Reacted to event.')
+                            .catch(err => console.error('Could not add event role to user', err));
+                    else
+                        await reactionMember.roles.remove(event.roleId, 'Reacted to event.')
+                            .catch(err => console.error('Could not add event role to user', err));
+                } catch (err) {
+                    if (err.httpStatus !== 404)
+                        console.error(`Error fetching member:`, err);
+                }
+            }
+        }
 
+        await event.reload();
 
-    await event.reload();
+        reaction.message.edit({ embed: await utils.createEventPost(reaction.message.guild, event) }).catch(err => {
+            console.error('Could not edit embed after updating member decision', err);
+        });
+    }
 
-    reaction.message.edit({ embed: await utils.createEventPost(reaction.message.guild, event) }).catch(err => {
-        console.error('Could not edit embed after updating member decision', err);
-    });
     reaction.users.remove(user.id).catch(err => { });
 });
 
 client.on('error', err => { });
 
 client.login(process.env.DISCORD_TOKEN);
+
+async function createGuildEvent(guild, event) {
+    let { allEvents } = utils.getEventsChannels(guild);
+    if (!allEvents)
+        allEvents = (await utils.createEventChannels(guild)).allEvents;
+
+    const question = utils.findEmojiByName(client, 'question');
+    const cross = utils.findEmojiByName(client, 'cross');
+    const tick = utils.findEmojiByName(client, 'tick');
+    const bin = utils.findEmojiByName(client, 'bin');
+
+    const eventPost = await allEvents.send({ embed: await utils.createEventPost(guild, event) });
+
+    await utils.storeEventPost(eventPost, event);
+
+    setTimeout(() => {
+        utils.expireEvent(guild, event).catch(err => console.error(`Could not expire event ${event.id}`, err));
+    }, event.date - Date.now() + 1000 * 60 * 60 * 24);
+
+    await eventPost.react(tick);
+    await eventPost.react(cross);
+    await eventPost.react(question);
+    await eventPost.react(bin);
+}
+
+async function createEventRoles(guild, event) {
+    const role = await guild.roles.create({
+        data: {
+            name: utils.truncate(event.name),
+            mentionable: true
+        },
+        reason: `For event: ${event.name}`
+    });
+    event.roleId = role.id;
+    await event.save();
+    return;
+}
+
+module.exports = client;
