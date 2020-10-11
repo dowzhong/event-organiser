@@ -98,6 +98,17 @@ client.on('message', async message => {
                 .catch(err => { });
             return;
         }
+
+        if (field === 'name' && await utils.getEvent({ name: name, guildId: message.guild.id, expired: false })) {
+            await message.reply({
+                embed: new MessageEmbed()
+                    .setDescription(`Another event with this name already exists.`)
+                    .setColor(config.colors.orangeError)
+            })
+                .catch(err => { });
+            return;
+        }
+
         try {
             await utils.editEvent(event, field, info);
 
@@ -109,7 +120,8 @@ client.on('message', async message => {
             const postedEvent = await allEvents.messages.fetch(post.id);
             if (!postedEvent) return;
 
-            postedEvent.edit({ embed: await utils.createEventPost(message.guild, event) });
+            await postedEvent.edit({ embed: await utils.createEventPost(message.guild, event) });
+            message.reply('Event edited.').catch(err => { });
         } catch (err) {
             if (err.httpStatus !== 404) {
                 await message.reply({
@@ -130,7 +142,7 @@ client.on('message', async message => {
 
         const eventName = args.join(' ').trim();
 
-        const conflictingEvent = await utils.getEvent({ name: eventName, guildId: message.guild.id });
+        const conflictingEvent = await utils.getEvent({ name: eventName, guildId: message.guild.id, expired: false });
         if (conflictingEvent) {
             message.reply('An event with that name is already scheduled.');
             return;
