@@ -52,7 +52,7 @@ client.on('message', async message => {
                         `${config.prefix}editevent 13 name New Event Name
                         ${config.prefix}editevent 13 date 20/10/2021 13:00
                         ${config.prefix}editevent 13 description New Description`)
-                    .setColor(config.colors.example)
+                    .setColor(config.colors.orangeError)
             })
                 .catch(err => { });
             return;
@@ -69,7 +69,7 @@ client.on('message', async message => {
                         `${config.prefix}editevent 13 name New Event Name
                         ${config.prefix}editevent 13 date 20/10/2021 13:00
                         ${config.prefix}editevent 13 description New Description`)
-                    .setColor(config.colors.example)
+                    .setColor(config.colors.orangeError)
             })
                 .catch(err => { });
             return;
