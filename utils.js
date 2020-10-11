@@ -48,7 +48,7 @@ module.exports = {
 
         const post = await event.getEventPost();
 
-        const postedEvent = await allEvents.messages.fetch(post.id);
+        const postedEvent = await allEvents.messages.fetch(post.id).catch(err => null);
         if (!postedEvent) return;
 
         postedEvent.edit({ embed: await this.createEventPost(guild, event) });
