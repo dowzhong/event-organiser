@@ -5,9 +5,9 @@ module.exports = {
         MESSAGE_REACTION_REMOVE: 'messageReactionRemove',
     },
     emojiDecision: {
-        tick: 'Going',
-        cross: 'Not Going',
-        question: 'Unsure'
+        '764105743644622868': 'Going',
+        '764105743539765278': 'Not Going',
+        '764105743351021569': 'Unsure',
     },
     redisPrefix: 'eventBot',
     colors: {

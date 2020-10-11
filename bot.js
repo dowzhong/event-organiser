@@ -148,14 +148,18 @@ client.on('messageReactionAdd', async (reaction, user) => {
         return;
     }
     if (event.date > Date.now()) {
+        const reactionMember = await reaction.message.guild.members.fetch(user.id);
+        const reactAction = config.emojiDecision[reaction.emoji.id];
+
         if (reaction.emoji.name === 'bin') {
             await event.removeParticipant(user.id);
-        } else if (config.emojiDecision[reaction.emoji.name]) {
-            await event.addParticipant(user.id, config.emojiDecision[reaction.emoji.name]);
+            await reactionMember.roles.remove(event.roleId, 'Reacted to event.')
+                .catch(err => console.error('Could not add event role to user', err));
+        } else if (reactAction) {
+            await event.addParticipant(user.id, reactAction);
             if (event.roleId) {
                 try {
-                    const reactionMember = await reaction.message.guild.members.fetch(user.id);
-                    if (reaction.emoji.name === 'tick')
+                    if (reactAction === 'Going')
                         await reactionMember.roles.add(event.roleId, 'Reacted to event.')
                             .catch(err => console.error('Could not add event role to user', err));
                     else

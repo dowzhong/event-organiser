@@ -110,9 +110,9 @@ module.exports = {
             .setTitle(event.name)
             .setDescription(event.description)
             .addField('Time', this.serverToLocalTime(event.date, dbGuild.utc_offset).toLocaleString('en-GB'))
-            .addField(`${tick} Going`, going.join('\n') || '-', true)
-            .addField(`${cross} Not Going`, notGoing.join('\n') || '-', true)
-            .addField(`${question} Unsure`, unsure.join('\n') || '-', true)
+            .addField(`${tick} Going (${going.length})`, going.join('\n') || '-', true)
+            .addField(`${cross} Not Going (${notGoing.length})`, notGoing.join('\n') || '-', true)
+            .addField(`${question} Unsure (${unsure.length})`, unsure.join('\n') || '-', true)
             .setTimestamp();
     },
     localToServerTime(date, utc) {
