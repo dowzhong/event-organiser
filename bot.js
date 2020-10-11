@@ -235,7 +235,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
         await redis.delAsync(reaction.message.id);
         return;
     }
-    if (event.date > Date.now()) {
+    if (!event.expired) {
         const reactionMember = await reaction.message.guild.members.fetch(user.id);
         const reactAction = config.emojiDecision[reaction.emoji.id];
 
