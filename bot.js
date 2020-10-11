@@ -75,11 +75,11 @@ client.on('message', async message => {
             return;
         }
 
-        const event = await utils.getEvent({ id: eventId });
+        const event = await utils.getEvent({ id: eventId, guildId: message.guild.id, expired: false });
         if (!event) {
             await message.reply({
                 embed: new MessageEmbed()
-                    .setDescription(`No event with id ${eventId} was found...`)
+                    .setDescription(`No ongoing event with id ${eventId} was found...`)
                     .setColor(config.colors.orangeError)
             })
                 .catch(err => { });
@@ -99,7 +99,7 @@ client.on('message', async message => {
             return;
         }
 
-        if (field === 'name' && await utils.getEvent({ name: info, guildId: message.guild.id, expired: false })) {
+        if (field === 'name' && event.name === info) {
             await message.reply({
                 embed: new MessageEmbed()
                     .setDescription(`Another event with this name already exists.`)
@@ -229,7 +229,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
     const correspondingEvent = await redis.getAsync(reaction.message.id);
     if (correspondingEvent === null) return;
 
-    const event = await utils.getEvent({ id: correspondingEvent });
+    const event = await utils.getEvent({ id: correspondingEvent, guildId: reaction.message.guild.id });
 
     if (!event) {
         await redis.delAsync(reaction.message.id);
