@@ -148,9 +148,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
         return;
     }
     if (event.date > Date.now()) {
-        if (reaction.emoji.name === 'bin') {
-            await event.removeParticipant(user.id);
-        } else if (config.emojiDecision[reaction.emoji.name]) {
+        if (config.emojiDecision[reaction.emoji.name]) {
             await event.addParticipant(user.id, config.emojiDecision[reaction.emoji.name]);
             if (event.roleId) {
                 try {
@@ -166,13 +164,43 @@ client.on('messageReactionAdd', async (reaction, user) => {
                         console.error(`Error fetching member: `, err);
                 }
             }
+            await event.reload();
+
+            reaction.message.edit({ embed: await utils.createEventPost(reaction.message.guild, event) }).catch(err => {
+                console.error('Could not edit embed after updating member decision', err);
+            });
         }
+    }
+});
 
-        await event.reload();
+client.on('messageReactionRemove', async (reaction, user) => {
+    if (user.bot || !reaction.message.guild) return;
 
-        reaction.message.edit({ embed: await utils.createEventPost(reaction.message.guild, event) }).catch(err => {
-            console.error('Could not edit embed after updating member decision', err);
-        });
+    const correspondingEvent = await redis.getAsync(reaction.message.id);
+    if (correspondingEvent === null) return;
+
+    const event = await utils.getEvent({ id: correspondingEvent });
+
+    if (!event) {
+        await redis.delAsync(reaction.message.id);
+        return;
+    }
+    if (event.date > Date.now()) {
+        if (config.emojiDecision[reaction.emoji.name]) {
+            await event.removeParticipant(user.id);
+
+            try {
+                const reactionMember = await reaction.message.guild.members.fetch(user.id);
+                reactionMember.roles.remove(event.roleId, 'Reacted to event.')
+                    .catch(err => console.error('Could not add event role to user', err));
+            } catch (err) { }
+
+            await event.reload();
+
+            reaction.message.edit({ embed: await utils.createEventPost(reaction.message.guild, event) }).catch(err => {
+                console.error('Could not edit embed after updating member decision', err);
+            });
+        }
     }
 
     reaction.users.remove(user.id).catch(err => { });
@@ -203,7 +231,6 @@ async function createGuildEvent(guild, event) {
     await eventPost.react(tick);
     await eventPost.react(cross);
     await eventPost.react(question);
-    await eventPost.react(bin);
 }
 
 async function createEventRoles(guild, event) {
