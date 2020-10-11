@@ -57,6 +57,16 @@ module.exports = {
         await event.setDataValue('participants', await event.getParticipants());
         return event;
     },
+    async editEvent(event, field, data) {
+        if (field === 'date') {
+            const guild = await event.getGuild();
+            const date = this.dateFromString(data);
+            event.date = this.localToServerTime(date, guild.utc_offset);
+            return event.save();
+        }
+        event[field] = data;
+        return event.save();
+    },
     async createEventChannels(guild) {
         const eventsCategory = await guild.channels.create('Organized Events', {
             type: 'category',
@@ -107,13 +117,13 @@ module.exports = {
 
         return new MessageEmbed()
             .setColor(expired ? config.colors.expired : config.colors.active)
-            .setTitle(event.name)
+            .setTitle(`[${event.id}] ${event.name}`)
             .setDescription(event.description)
             .addField('Time', this.serverToLocalTime(event.date, dbGuild.utc_offset).toLocaleString('en-GB'))
             .addField(`${tick} Going (${going.length})`, going.join('\n') || '-', true)
             .addField(`${cross} Not Going (${notGoing.length})`, notGoing.join('\n') || '-', true)
             .addField(`${question} Unsure (${unsure.length})`, unsure.join('\n') || '-', true)
-            .setTimestamp();
+            .setTimestamp(event.createdAt);
     },
     localToServerTime(date, utc) {
         const serverTime = new Date(date.getTime());
@@ -192,5 +202,18 @@ module.exports = {
         }
 
         return setTimeout.apply(undefined, arguments);
+    },
+    validDate(string) {
+        return !!string.match(/^\d{1,2}\/\d{1,2}\/\d{4}\s\d{1,2}:\d{2}$/);
+    },
+    dateFromString(timeMsg) {
+        const [dateString, time] = timeMsg.split(' ');
+        const [day, month, year] = dateString.split('/');
+        const [hour, minute] = time.split(':');
+        const date = new Date();
+        date.setFullYear(Number(year), Number(month) - 1, Number(day));
+        date.setHours(hour, minute, 0, 0);
+
+        return date;
     }
 }

@@ -13,7 +13,9 @@ module.exports = {
     colors: {
         active: 0x99EEBB,
         expired: 0x2c2f33,
-        example: 0xC0C0C0
+        example: 0xC0C0C0,
+        orangeError: 0xff781f,
+        redError: 0xff0033
     },
     botMessageTimeout: 1000 * 60 * 2
 };

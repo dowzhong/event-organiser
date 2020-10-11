@@ -5,6 +5,7 @@ const redis = require('./redis.js');
 
 const Discord = require('discord.js');
 const { MessageEmbed } = require('discord.js');
+const { delAsync } = require('./redis.js');
 
 const client = new Discord.Client();
 
@@ -42,6 +43,85 @@ client.on('message', async message => {
     const args = message.content.split(' ');
     const command = args.shift().toLowerCase().slice(config.prefix.length);
 
+    if (command === 'editevent') {
+        if (args.length < 3) {
+            await message.reply({
+                embed: new MessageEmbed()
+                    .setDescription(`Please use the command like: \`${config.prefix}editevent {event id} {name|date|description} {new info}\``)
+                    .addField('Example',
+                        `${config.prefix}editevent 13 name New Event Name
+                        ${config.prefix}editevent 13 date 20/10/2021 13:00
+                        ${config.prefix}editevent 13 description New Description`)
+                    .setColor(config.colors.example)
+            })
+                .catch(err => { });
+            return;
+        }
+        const eventId = Number(args[0]);
+        const field = args[1].toLowerCase();
+        const info = args.splice(2).join(' ');
+
+        if (!['name', 'date', 'description'].includes(field)) {
+            await message.reply({
+                embed: new MessageEmbed()
+                    .setTitle(`2nd argument (field) must be one of \`name, date, description\`.`)
+                    .addField('Example',
+                        `${config.prefix}editevent 13 name New Event Name
+                        ${config.prefix}editevent 13 date 20/10/2021 13:00
+                        ${config.prefix}editevent 13 description New Description`)
+                    .setColor(config.colors.example)
+            })
+                .catch(err => { });
+            return;
+        }
+
+        const event = await utils.getEvent({ id: eventId });
+        if (!event) {
+            await message.reply({
+                embed: new MessageEmbed()
+                    .setDescription(`No event with id ${eventId} was found...`)
+                    .setColor(config.colors.orangeError)
+            })
+                .catch(err => { });
+            return;
+        }
+
+        if (field === 'date' && !utils.validDate(info)) {
+            await message.reply({
+                embed: new MessageEmbed()
+                    .setTitle(`Invalid date format. Use \`DD/MM/YYYY HH:MM\``)
+                    .addField('Date Example',
+                        `24/12/2020 13:00
+                        12/3/2020 9:00`)
+                    .setColor(config.colors.orangeError)
+            })
+                .catch(err => { });
+            return;
+        }
+        try {
+            await utils.editEvent(event, field, info);
+
+            const { allEvents } = utils.getEventsChannels(message.guild);
+            if (!allEvents) return;
+
+            const post = await event.getEventPost();
+
+            const postedEvent = await allEvents.messages.fetch(post.id);
+            if (!postedEvent) return;
+
+            postedEvent.edit({ embed: await utils.createEventPost(message.guild, event) });
+        } catch (err) {
+            if (err.httpStatus !== 404) {
+                await message.reply({
+                    embed: new MessageEmbed()
+                        .setTitle(`Unexpected error occured: ${err.message}`)
+                        .setColor(config.colors.redError)
+                })
+                    .catch(err => { });
+            }
+        }
+    }
+
     if (command === 'newevent') {
         if (!args[0]) {
             message.reply('Please specify a valid name for this event.');
@@ -69,7 +149,7 @@ client.on('message', async message => {
                 .catch(err => { });
 
             const filter = msg => msg.author.id === message.author.id
-                && msg.content.match(/^\d{1,2}\/\d{1,2}\/\d{4}\s\d{1,2}:\d{2}$/);
+                && utils.validDate(msg.content);
 
             const timeReply = await message.channel.awaitMessages(filter, {
                 max: 1,
@@ -78,12 +158,8 @@ client.on('message', async message => {
             });
             const timeMsg = timeReply.first().content;
 
-            const [dateString, time] = timeMsg.split(' ');
-            const [day, month, year] = dateString.split('/');
-            const [hour, minute] = time.split(':');
-            const date = new Date();
-            date.setFullYear(Number(year), Number(month) - 1, Number(day));
-            date.setHours(hour, minute, 0, 0);
+            const date = utils.dateFromString(timeMsg);
+
             await message.reply({
                 embed: new MessageEmbed()
                     .setDescription('Please give a short description of the event.')
