@@ -44,5 +44,6 @@ module.exports = {
     Events,
     Guilds,
     Participants,
-    sequelize
+    sequelize,
+    Sequelize
 };

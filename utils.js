@@ -12,10 +12,16 @@ module.exports = {
             }
         });
     },
+    getAllEvents(where) {
+        return database.Events.findAll({
+            where,
+            include: 'participants'
+        });
+    },
     getEvent(query) {
         return database.Events.findOne({
             where: query,
-            include: 'participants',
+            include: 'participants'
         });
     },
     deleteEvent(query) {
@@ -29,6 +35,8 @@ module.exports = {
 
         event.expired = true;
         await event.save();
+
+        if (!guild) return;
 
         try {
             const eventRole = await guild.roles.fetch(event.roleId);
@@ -188,20 +196,6 @@ module.exports = {
         if (string.length <= length) return string;
 
         return string.slice(0, length - 3) + '...';
-    },
-    longTimeout(fn, delay) {
-        const maxDelay = Math.pow(2, 31) - 1;
-
-        if (delay > maxDelay) {
-            var args = arguments;
-            args[1] -= maxDelay;
-
-            return setTimeout(function () {
-                setTimeout_.apply(undefined, args);
-            }, maxDelay);
-        }
-
-        return setTimeout.apply(undefined, arguments);
     },
     validDate(string) {
         return !!string.match(/^\d{1,2}\/\d{1,2}\/\d{4}\s\d{1,2}:\d{2}$/);

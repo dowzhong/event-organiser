@@ -4,21 +4,19 @@ const client = require('./bot.js');
 const database = require('./database.js');
 const utils = require('./utils.js');
 
-async function init() {
-    const futureEvents = await database.Events.findAll({
-        where: {
-            expired: false
-        },
-        include: 'participants'
-    });
-    futureEvents.forEach(event => {
-        utils.longTimeout(async () => {
-            utils.expireEvent(await client.guilds.fetch(event.guildId), event.id)
-                .catch(err => console.error(`Could not expire event ${event.id}`, err));
-        }, event.date - Date.now() + 1000 * 60 * 60 * 24);
-    });
-}
+const schedule = require('node-schedule');
 
 client.once('ready', () => {
-    init();
-});
+    schedule.scheduleJob('0 0 * * *', async () => {
+        const events = await utils.getAllEvents({
+            expired: false,
+            date: {
+                [database.Sequelize.Op.lt]: Date.now()
+            }
+        });
+        events.forEach(async event => {
+            const guild = await client.guilds.fetch(event.guildId).catch(err => null);
+            utils.expireEvent(guild, event.id).catch(err => console.error(`Could not expire event ${event.id}`, err));
+        });
+    });
+})

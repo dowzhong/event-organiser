@@ -276,10 +276,6 @@ async function createGuildEvent(guild, event) {
 
     await utils.storeEventPost(eventPost, event);
 
-    utils.longTimeout(() => {
-        utils.expireEvent(guild, event.id).catch(err => console.error(`Could not expire event ${event.id} `, err));
-    }, event.date - Date.now() + 1000 * 60 * 60 * 24);
-
     await eventPost.react(tick);
     await eventPost.react(cross);
     await eventPost.react(question);
