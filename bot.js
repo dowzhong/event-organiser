@@ -99,7 +99,7 @@ client.on('message', async message => {
             return;
         }
 
-        if (field === 'name' && await utils.getEvent({ name: name, guildId: message.guild.id, expired: false })) {
+        if (field === 'name' && await utils.getEvent({ name: info, guildId: message.guild.id, expired: false })) {
             await message.reply({
                 embed: new MessageEmbed()
                     .setDescription(`Another event with this name already exists.`)
