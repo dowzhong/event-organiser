@@ -2,6 +2,15 @@ const config = require('./config.js');
 const database = require('./database.js');
 const { Permissions, MessageEmbed } = require('discord.js');
 
+const days = [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Friday',
+    'Saturday'
+];
+
 const redis = require('./redis.js');
 
 module.exports = {
@@ -121,19 +130,18 @@ module.exports = {
         const notGoing = await this.getNicknamesByDecision(guild, event, 'Not Going');
         const unsure = await this.getNicknamesByDecision(guild, event, 'Unsure');
         
-        let eventDate = this.serverToLocalTime(event.date, dbGuild.utc_offset).toUTCString().split(':');
-        eventDate.pop();
-        eventDate = eventDate.join(':');
+        const eventDate = this.serverToLocalTime(event.date, dbGuild.utc_offset);
+        const eventDateString = `${days[eventDate.getDay()]}, ${eventDate.toLocaleString()}`;
         
         return new MessageEmbed()
             .setColor(event.expired ? config.colors.expired : config.colors.active)
             .setTitle(`[${event.id}] ${event.name}`)
             .setDescription(event.description)
-            .addField('Time', eventDate)
+            .addField('Time', eventDateString)
             .addField(`${tick} Going (${going.length})`, going.join('\n') || '-', true)
             .addField(`${cross} Not Going (${notGoing.length})`, notGoing.join('\n') || '-', true)
             .addField(`${question} Unsure (${unsure.length})`, unsure.join('\n') || '-', true)
-            .setFooter('Let others know if you\`re coming with by reacting')
+            .setFooter('Let others know if you\'re coming with by reacting')
             .setTimestamp(event.createdAt);
     },
     localToServerTime(date, utc) {
