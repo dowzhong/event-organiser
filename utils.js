@@ -142,7 +142,7 @@ module.exports = {
             .addField(`${tick} Going (${going.length})`, going.join('\n') || '-', true)
             .addField(`${cross} Not Going (${notGoing.length})`, notGoing.join('\n') || '-', true)
             .addField(`${question} Unsure (${unsure.length})`, unsure.join('\n') || '-', true)
-            .setFooter('Let others know if you\'re coming with by reacting')
+            .setFooter('Let others know if you\'re coming by reacting')
             .setTimestamp(event.createdAt);
     },
     localToServerTime(date, utc) {
