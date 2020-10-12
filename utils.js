@@ -62,6 +62,7 @@ module.exports = {
         if (!postedEvent) return;
 
         postedEvent.edit({ embed: await this.createEventPost(guild, event) });
+        postedEvent.reactions.removeAll();
     },
     async createEvent(guild, name, description, unparsedDate) {
         const [dbGuild] = await this.getGuild(guild.id);
