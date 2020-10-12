@@ -171,7 +171,7 @@ module.exports = {
     },
     getNicknamesByDecision(guild, event, decision) {
         const participants = event.getDataValue('participants').filter(participant => participant.eventParticipants.decision === decision);
-        return this.getNicknameFromParticipants(guild, participants);
+        return this.getNicknameFromParticipants(guild, participants).sort();
     },
     async getNicknameFromParticipants(guild, participants) {
         const nicknames = await Promise.all(
