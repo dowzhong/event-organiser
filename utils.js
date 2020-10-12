@@ -120,13 +120,16 @@ module.exports = {
         const going = await this.getNicknamesByDecision(guild, event, 'Going');
         const notGoing = await this.getNicknamesByDecision(guild, event, 'Not Going');
         const unsure = await this.getNicknamesByDecision(guild, event, 'Unsure');
-
-
+        
+        let eventDate = this.serverToLocalTime(event.date, dbGuild.utc_offset).toUTCString().split(':');
+        eventDate.pop();
+        eventDate = eventDate.join(':');
+        
         return new MessageEmbed()
             .setColor(event.expired ? config.colors.expired : config.colors.active)
             .setTitle(`[${event.id}] ${event.name}`)
             .setDescription(event.description)
-            .addField('Time', this.serverToLocalTime(event.date, dbGuild.utc_offset).toLocaleString('en-GB'))
+            .addField('Time', eventDate)
             .addField(`${tick} Going (${going.length})`, going.join('\n') || '-', true)
             .addField(`${cross} Not Going (${notGoing.length})`, notGoing.join('\n') || '-', true)
             .addField(`${question} Unsure (${unsure.length})`, unsure.join('\n') || '-', true)
