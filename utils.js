@@ -169,7 +169,7 @@ module.exports = {
     filterParticipants(event, status) {
         return event.getDataValue('participants').filter(participant => participant.eventParticipants.decision === status);
     },
-    getNicknamesByDecision(guild, event, decision) {
+    async getNicknamesByDecision(guild, event, decision) {
         const participants = event.getDataValue('participants').filter(participant => participant.eventParticipants.decision === decision);
         return (await this.getNicknameFromParticipants(guild, participants)).sort();
     },
