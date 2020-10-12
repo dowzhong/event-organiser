@@ -132,7 +132,7 @@ module.exports = {
         const unsure = await this.getNicknamesByDecision(guild, event, 'Unsure');
         
         const eventDate = this.serverToLocalTime(event.date, dbGuild.utc_offset);
-        const eventDateString = `${days[eventDate.getDay()]}, ${eventDate.toLocaleString()}`;
+        const eventDateString = `${days[eventDate.getDay()]}, ${eventDate.toLocaleString('en-GB')}`;
         
         return new MessageEmbed()
             .setColor(event.expired ? config.colors.expired : config.colors.active)
