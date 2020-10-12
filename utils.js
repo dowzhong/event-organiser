@@ -130,10 +130,10 @@ module.exports = {
         const going = await this.getNicknamesByDecision(guild, event, 'Going');
         const notGoing = await this.getNicknamesByDecision(guild, event, 'Not Going');
         const unsure = await this.getNicknamesByDecision(guild, event, 'Unsure');
-        
+
         const eventDate = this.serverToLocalTime(event.date, dbGuild.utc_offset);
         const eventDateString = `${days[eventDate.getDay()]}, ${eventDate.toLocaleString('en-GB')}`;
-        
+
         return new MessageEmbed()
             .setColor(event.expired ? config.colors.expired : config.colors.active)
             .setTitle(`[${event.id}] ${event.name}`)
@@ -171,7 +171,7 @@ module.exports = {
     },
     getNicknamesByDecision(guild, event, decision) {
         const participants = event.getDataValue('participants').filter(participant => participant.eventParticipants.decision === decision);
-        return this.getNicknameFromParticipants(guild, participants).sort();
+        return (await this.getNicknameFromParticipants(guild, participants)).sort();
     },
     async getNicknameFromParticipants(guild, participants) {
         const nicknames = await Promise.all(
