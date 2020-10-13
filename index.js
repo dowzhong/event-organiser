@@ -34,15 +34,11 @@ client.once('ready', async () => {
         }
     });
 
-    console.log(events);
-    
     events.forEach(async event => {
         const guild = await client.guilds.fetch(event.guildId).catch(err => null);
         if (!guild) return;
         const { eventTalk } = utils.getEventsChannels(guild);
         eventTalk.send(`Hey <@&${event.roleId}>, just a reminder that your event is coming up tomorrow!`)
-            .catch(err => {
-                console.error(err);
-            });
+            .catch(err => { });
     });
 });
