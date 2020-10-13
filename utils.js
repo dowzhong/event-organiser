@@ -64,13 +64,14 @@ module.exports = {
         postedEvent.edit({ embed: await this.createEventPost(guild, event) });
         postedEvent.reactions.removeAll();
     },
-    async createEvent(guild, name, description, unparsedDate) {
+    async createEvent(guild, createdBy, name, description, unparsedDate) {
         const [dbGuild] = await this.getGuild(guild.id);
         const date = this.localToServerTime(unparsedDate, dbGuild.utc_offset);
         const event = await database.Events.create({
             name: name.trim(),
             description: description.trim(),
             date,
+            createdBy
         });
         await event.setGuild(dbGuild);
         await event.setDataValue('participants', await event.getParticipants());
@@ -139,6 +140,8 @@ module.exports = {
         const notGoing = await this.getNicknamesByDecision(guild, event, 'Not Going');
         const unsure = await this.getNicknamesByDecision(guild, event, 'Unsure');
 
+        const creator = await this.getNicknameFromId(guild, event.createdBy).catch(err => '-');
+
         const eventDate = this.serverToLocalTime(event.date, dbGuild.utc_offset);
         const eventDateString = `${days[eventDate.getDay()]}, ${eventDate.toLocaleString('en-GB').slice(0, -3)}`;
 
@@ -150,7 +153,7 @@ module.exports = {
             .addField(`${tick} Going (${going.length})`, this.truncate(going.join('\n') || '-', 1024), true)
             .addField(`${cross} Not Going (${notGoing.length})`, this.truncate(notGoing.join('\n') || '-', 1024), true)
             .addField(`${question} Unsure (${unsure.length})`, this.truncate(unsure.join('\n') || '-', 1024), true)
-            .setFooter('Let others know if you\'re coming by reacting')
+            .setFooter(`Let others know if you\'re coming by reacting - Event by ${creator}`)
     },
     localToServerTime(date, utc) {
         const serverTime = new Date(date.getTime());

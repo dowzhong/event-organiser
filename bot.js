@@ -43,6 +43,21 @@ client.on('message', async message => {
     const args = message.content.split(' ');
     const command = args.shift().toLowerCase().slice(config.prefix.length);
 
+    if (command === 'delete') {
+        if (!args.length) {
+            await message.reply({
+                embed: new MessageEmbed()
+                    .setDescription(`Please use the command like: \`${config.prefix}delete {event id}\``)
+                    .addField('Example',
+                        `${config.prefix}delete 13`)
+                    .setColor(config.colors.orangeError)
+            })
+                .catch(err => { });
+            return;
+        }
+        // TODO
+    }
+
     if (command === 'editevent') {
         if (args.length < 3) {
             await message.reply({
@@ -189,9 +204,16 @@ client.on('message', async message => {
             awaitingMessage.delete(message.author.id);
 
             const statusMsg = await message.reply('*Creating event...*');
-            const event = await utils.createEvent(message.guild, eventName, descriptionReply.first().content, date);
+            const event = await utils.createEvent(
+                message.guild,
+                message.author.id,
+                eventName,
+                descriptionReply.first().content,
+                date
+            );
 
-            await createEventRoles(message.guild, event).catch(err => console.error('Could not create event role', eventName, err));
+            await createEventRoles(message.guild, event)
+                .catch(err => console.error('Could not create event role', eventName, err));
             await createGuildEvent(message.guild, event, descriptionReply.first().content, date);
 
             statusMsg.edit(`${message.author}, New event ***${event.name}*** created!`).catch(err => { });
