@@ -13,6 +13,7 @@ const days = [
 ];
 
 const redis = require('./redis.js');
+const { eventNames } = require('./bot.js');
 
 module.exports = {
     getGuild(guildId) {
@@ -86,6 +87,13 @@ module.exports = {
         event[field] = data;
         return event.save();
     },
+    async deleteEvent(event) {
+        return database.Events.destroy({
+            where: {
+                id: event.id
+            }
+        });
+    },
     async createEventChannels(guild) {
         const eventsCategory = await guild.channels.create('Organized Events', {
             type: 'category',
@@ -144,7 +152,6 @@ module.exports = {
             .addField(`${cross} Not Going (${notGoing.length})`, this.truncate(notGoing.join('\n') || '-', 1024), true)
             .addField(`${question} Unsure (${unsure.length})`, this.truncate(unsure.join('\n') || '-', 1024), true)
             .setFooter('Let others know if you\'re coming by reacting')
-            .setTimestamp(event.createdAt);
     },
     localToServerTime(date, utc) {
         const serverTime = new Date(date.getTime());
