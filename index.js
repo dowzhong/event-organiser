@@ -1,6 +1,9 @@
 require('dotenv').config();
 const client = require('./bot.js');
 
+const { MessageEmbed, Message } = require('discord.js');
+
+const config = require('./config.js');
 const database = require('./database.js');
 const utils = require('./utils.js');
 
@@ -39,8 +42,17 @@ client.once('ready', async () => {
         events.forEach(async event => {
             const guild = await client.guilds.fetch(event.guildId).catch(err => null);
             if (!guild) return;
-            const { eventTalk } = utils.getEventsChannels(guild);
-            eventTalk.send(`Hey <@&${event.roleId}>, just a reminder that your event is coming up tomorrow!`)
+            const { eventTalk, allEvents } = utils.getEventsChannels(guild);
+
+            const post = await event.getEventPost();
+            const postedEvent = await allEvents.messages.fetch(post.id).catch(err => null);
+
+            const reminder = new MessageEmbed()
+                .setTitle(`Hey peeps, just a reminder that your event* **${event.name}*** is coming up tomorrow!`)
+                .addField('Event', `**[Link](${postedEvent ? postedEvent.url : '-'})**`)
+                .setColor(config.colors.active)
+
+            eventTalk.send(`<@&${event.roleId}>`, { embed: reminder })
                 .catch(err => { });
         });
     });
