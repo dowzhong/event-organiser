@@ -137,12 +137,12 @@ module.exports = {
 
         return new MessageEmbed()
             .setColor(event.expired ? config.colors.expired : config.colors.active)
-            .setTitle(`[${event.id}] ${event.name}`)
-            .setDescription(event.description)
+            .setTitle(this.truncate(`[${event.id}] ${event.name}`, 256))
+            .setDescription(this.truncate(event.description, 2048))
             .addField('Time', eventDateString)
-            .addField(`${tick} Going (${going.length})`, going.join('\n') || '-', true)
-            .addField(`${cross} Not Going (${notGoing.length})`, notGoing.join('\n') || '-', true)
-            .addField(`${question} Unsure (${unsure.length})`, unsure.join('\n') || '-', true)
+            .addField(`${tick} Going (${going.length})`, this.truncate(going.join('\n') || '-', 1024), true)
+            .addField(`${cross} Not Going (${notGoing.length})`, this.truncate(notGoing.join('\n') || '-', 1024), true)
+            .addField(`${question} Unsure (${unsure.length})`, this.truncate(unsure.join('\n') || '-', 1024), true)
             .setFooter('Let others know if you\'re coming by reacting')
             .setTimestamp(event.createdAt);
     },
