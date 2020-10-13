@@ -13,7 +13,6 @@ const days = [
 ];
 
 const redis = require('./redis.js');
-const { eventNames } = require('./bot.js');
 
 module.exports = {
     getGuild(guildId) {
