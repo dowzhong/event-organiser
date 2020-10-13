@@ -19,26 +19,29 @@ client.once('ready', async () => {
             utils.expireEvent(guild, event.id).catch(err => console.error(`Could not expire event ${event.id}`, err));
         });
     });
-    const tomorrowStart = new Date();
-    tomorrowStart.setHours(0, 0, 0, 0);
-    tomorrowStart.setDate(tomorrowStart.getDate() + 1);
 
-    const tomorrowEnd = new Date();
-    tomorrowEnd.setHours(0, 0, 0, 0);
-    tomorrowEnd.setDate(tomorrowEnd.getDate() + 2);
+    schedule.scheduleJob('0 13 * * *', async () => {
+        const tomorrowStart = new Date();
+        tomorrowStart.setHours(0, 0, 0, 0);
+        tomorrowStart.setDate(tomorrowStart.getDate() + 1);
 
-    const events = await utils.getAllEvents({
-        expired: false,
-        date: {
-            [database.Sequelize.Op.between]: [tomorrowStart, tomorrowEnd]
-        }
-    });
+        const tomorrowEnd = new Date();
+        tomorrowEnd.setHours(0, 0, 0, 0);
+        tomorrowEnd.setDate(tomorrowEnd.getDate() + 2);
 
-    events.forEach(async event => {
-        const guild = await client.guilds.fetch(event.guildId).catch(err => null);
-        if (!guild) return;
-        const { eventTalk } = utils.getEventsChannels(guild);
-        eventTalk.send(`Hey <@&${event.roleId}>, just a reminder that your event is coming up tomorrow!`)
-            .catch(err => { });
+        const events = await utils.getAllEvents({
+            expired: false,
+            date: {
+                [database.Sequelize.Op.between]: [tomorrowStart, tomorrowEnd]
+            }
+        });
+
+        events.forEach(async event => {
+            const guild = await client.guilds.fetch(event.guildId).catch(err => null);
+            if (!guild) return;
+            const { eventTalk } = utils.getEventsChannels(guild);
+            eventTalk.send(`Hey <@&${event.roleId}>, just a reminder that your event is coming up tomorrow!`)
+                .catch(err => { });
+        });
     });
 });
