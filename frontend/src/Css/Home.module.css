@@ -1,12 +1,9 @@
 .white {
-    color: #ffffff
+    color: #222222
 }
 
 .icon {
     border-radius: 50%;
-}
-
-img {
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -15,7 +12,7 @@ img {
 
 .bannerContainer {
     padding: 10% 15%;
-    background-color: hsl(240, 42.3%, 48.2%);
+    background-color: rgb(219, 219, 219);
 }
 
 .banner {
@@ -23,7 +20,7 @@ img {
 }
 
 .fadedBlue {
-    color: hsl(220, 30%, 60%)
+    color: hsl(0, 0%, 59%)
 }
 
 .bannerItem {
@@ -31,13 +28,11 @@ img {
 }
 
 .bannerText {
-    margin-top: 5rem;
+    margin-top: 3rem;
 }
 
 .slanted {
     height: 43rem;
-    -webkit-clip-path: polygon(0 0, 100% 0, 100% 56%, 0 100%);
-    clip-path: polygon(0 0, 100% 0, 100% 96%, 0 100%);
 }
 
 .content {
@@ -60,7 +55,34 @@ img {
 }
 
 .detail .textblock {
-    margin-top: 3rem;
+    margin-top: 2rem;
+}
+
+.introduction {
+    width: 80%;
+}
+
+.content h3 {
+    text-align: center;
+    text-decoration: underline;
+}
+
+.featureIcon {
+    margin-bottom: 1rem;
+    width: 75px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+.feature {
+    text-align: center;
+    min-height: 200px;
+}
+
+.featuresSection {
+    padding: 1rem;
+    background-color: rgb(219, 219, 219);
 }
 
 @media (max-width: 768px) {
@@ -70,8 +92,18 @@ img {
     .bannerText {
         margin-top: 0rem;
     }
+    .icon {
+        border-radius: 50%;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;
+    }
     img {
-        margin-top: 4rem;
-        width: 80%;
+        margin-top: 2rem;
+        width: 100%;
+    }
+    .feature {
+        margin-bottom: 2rem;
     }
 }
