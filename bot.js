@@ -304,8 +304,11 @@ client.on('messageReactionAdd', async (reaction, user) => {
             console.error('Could not edit embed after updating member decision', err);
         });
     }
-
-    reaction.users.remove(user.id).catch(err => { });
+    
+    reaction.users.cache.forEach(user => {
+        if (user.id === client.user.id) return;
+        reaction.users.remove(user.id).catch(err => { });
+    });
 });
 
 client.on('error', err => { });
