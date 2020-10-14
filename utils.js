@@ -34,10 +34,26 @@ module.exports = {
             include: 'participants'
         });
     },
-    deleteEvent(query) {
-        return database.Events.destroy({
-            where: query
+    async deleteGuildEvent(guild, eventId) {
+        const event = await this.getEvent({
+            id: eventId
         });
+        if (!event) return null;
+
+        const eventPost = await event.getEventPost();
+
+        const eventRole = await guild.roles.fetch(event.roleId);
+        if (eventRole) eventRole.delete('Event deleted.').catch(err => { });
+
+        if (eventPost) {
+            const { allEvents } = await this.getEventsChannels(guild);
+            if (allEvents) {
+                const eventMessage = await allEvents.messages.fetch(eventPost.id).catch(err => null);
+                if (eventMessage) eventMessage.delete().catch(err => { });
+            }
+        }
+
+        return event.destroy();
     },
     async expireEvent(guild, eventId) {
         const event = await this.getEvent({ id: eventId });
@@ -231,5 +247,8 @@ module.exports = {
         date.setHours(hour, minute, 0, 0);
 
         return date;
+    },
+    getRoleByName(roleCache, roleName) {
+        return roleCache.find(role => role.name === roleName);
     }
 }

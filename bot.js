@@ -40,6 +40,11 @@ client.on('message', async message => {
         || awaitingMessage.has(message.author.id))
         return;
 
+    if (utils.getRoleByName(message.guild.roles.cache, 'Event Organiser')
+        && !utils.getRoleByName(message.member.roles.cache, 'Event Organiser')) {
+        return;
+    }
+
     const args = message.content.split(' ');
     const command = args.shift().toLowerCase().slice(config.prefix.length);
 
@@ -55,10 +60,21 @@ client.on('message', async message => {
                 .catch(err => { });
             return;
         }
-        // TODO
+
+        const deleted = await utils.deleteGuildEvent(message.guild, Number(args[0]));
+        if (!deleted) {
+            message.reply({
+                embed: new MessageEmbed()
+                    .setDescription(`No event with id ${eventId} was found...`)
+                    .setColor(config.colors.orangeError)
+            })
+                .catch(err => { });
+            return;
+        }
+        message.reply('Event deleted.').catch(err => { });
     }
 
-    if (command === 'editevent') {
+    if (command === 'edit') {
         if (args.length < 3) {
             await message.reply({
                 embed: new MessageEmbed()
@@ -149,7 +165,7 @@ client.on('message', async message => {
         }
     }
 
-    if (command === 'newevent') {
+    if (command === 'new') {
         if (!args[0]) {
             message.reply('Please specify a valid name for this event.');
             return;
