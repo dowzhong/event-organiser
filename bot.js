@@ -307,7 +307,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
     
     reaction.users.cache.forEach(user => {
         if (user.id === client.user.id) return;
-        reaction.users.remove(user.id).catch(err => { });
+        reaction.users.remove(user.id).catch(err => { console.error(err); });
     });
 });
 
