@@ -56,4 +56,20 @@ client.once('ready', async () => {
                 .catch(err => { });
         });
     });
+
+    const events = await utils.getAllEvents({
+        expired: true
+    });
+
+    events.forEach(async event => {
+        const guild = await client.guilds.fetch(event.guildId).catch(err => null);
+        if (!guild) return;
+        const { allEvents } = utils.getEventsChannels(guild);
+
+        const post = await event.getEventPost();
+        const postedEvent = await allEvents.messages.fetch(post.id).catch(err => null);
+
+        postedEvent.delete({ reason: 'Prune expired events.' })
+            .catch(err => { });
+    });
 });
