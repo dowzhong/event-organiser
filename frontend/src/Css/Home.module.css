@@ -1,5 +1,5 @@
 .white {
-    color: #222222
+    color: #fff;
 }
 
 .icon {
@@ -12,15 +12,15 @@
 
 .bannerContainer {
     padding: 10% 15%;
-    background-color: rgb(219, 219, 219);
+    background-color: #3e4247;
 }
 
 .banner {
     margin: 0 20%;
 }
 
-.fadedBlue {
-    color: hsl(0, 0%, 59%)
+.faded {
+    color: rgb(255, 255, 255, 0.6);
 }
 
 .bannerItem {
@@ -36,17 +36,20 @@
 }
 
 .content {
-    margin: 3rem 20% !important;
+    margin: 7rem 20% 0 20% !important;
+    align-items: center;
+    justify-content: center;
 }
 
 .heading {
-    color: rgb(46, 46, 46);
+    color: #fff;
     font-size: 20px;
     font-weight: 500;
     margin-bottom: 0%;
 }
 
 .subheading {
+    color: rgb(255, 255, 255, 0.6);
     font-weight: 400;
     font-size: 20px;
     margin-bottom: 0%;
@@ -56,11 +59,8 @@
     max-width: 35rem;
 }
 
-.detail .textblock {
-    margin-top: 2rem;
-}
-
 .explanation {
+    color: rgb(255, 255, 255, 0.6);
     font-weight: 400;
 }
 
@@ -68,9 +68,10 @@
     width: 80%;
 }
 
-.content h3 {
+.content h2 {
+    margin-bottom: 2rem;
     text-align: center;
-    text-decoration: underline;
+    color: rgb(255, 255, 255, 1);
 }
 
 .featureIcon {
@@ -87,16 +88,39 @@
 }
 
 .featuresSection {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
     padding: 1rem;
-    background-color: rgb(219, 219, 219);
+    background-color: #2c2f33;
 }
 
-@media (max-width: 768px) {
+.signin {
+    background-color: #7289da !important;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+
+img {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+@media only screen and (max-width: 600px) {
+    .bannerContainer {
+        padding: 10% 10%;
+        background-color: #3e4247;
+    }
+
     .banner {
-        margin: 20% 10%;
+        margin: 20% 0%;
     }
     .bannerText {
         margin-top: 0rem;
+    }
+    .content {
+        margin: 5rem 10% 0 10% !important;
     }
     .icon {
         border-radius: 50%;
@@ -111,5 +135,10 @@
     }
     .feature {
         margin-bottom: 2rem;
+    }
+    .signin {
+        position: absolute;
+        top: 20px;
+        right: 20px;
     }
 }

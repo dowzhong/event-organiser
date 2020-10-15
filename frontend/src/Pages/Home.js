@@ -1,15 +1,47 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '../Css/Home.module.css';
 
-function Home() {
+import { Button } from 'shards-react';
+
+import * as qs from "query-string"
+
+function Home(props) {
+    const [token, setToken] = useState(null);
+    useEffect(() => {
+        const queryString = qs.parse(props.location.search);
+        if (queryString.token) {
+            localStorage.setItem('token', `${queryString.type} ${queryString.token}`);
+            localStorage.setItem('refresh_token', queryString.refresh);
+        }
+        setToken(localStorage.getItem('token'));
+    }, []);
     return (
         <div>
+            {
+                token
+                    ? <Button
+                        onClick={() => {
+                            window.location = process.env.REACT_APP_DISCORD_AUTH
+                        }}
+                        className={styles.signin}
+                    >
+                        Manage Plan
+                </Button>
+                    : <Button
+                        onClick={() => {
+                            window.location = process.env.REACT_APP_DISCORD_AUTH
+                        }}
+                        className={styles.signin}
+                    >
+                        Sign in through Discord
+                    </Button>
+            }
             <div className={styles.bannerContainer + ' ' + styles.slanted}>
                 <div className={`${styles.banner} row`}>
                     <div className={`${styles.bannerItem + ' ' + styles.bannerText} col-md-6 col-12`}>
                         <div className={styles.bannerText}>
                             <h1 className={styles.white}>Event Organisation</h1>
-                            <h2 className={styles.fadedBlue}>In one place</h2>
+                            <h2 className={styles.faded}>All in Discord</h2>
                         </div>
                     </div>
                     <div className={`${styles.bannerItem} col-md-6 col-12`}>
@@ -18,8 +50,8 @@ function Home() {
                 </div>
             </div>
             <div className={`${styles.content} row`}>
-                <div className={`${styles.detail} col-md-6 col-12`}>
-                    <div className={styles.textblock}>
+                <div className={`${styles.detail} col-md-6 col-12 align-middle`}>
+                    <div className={`${styles.textblock}`}>
                         <p className={styles.heading}>Organising events don't have to be hard.</p>
                         <p className={styles.subheading}>
                             Event Organiser bot is the Discord solution to scheduling virtual or
@@ -32,9 +64,22 @@ function Home() {
                     <img alt='example' src='./discord.gif' width='500px' />
                 </div>
             </div>
+            <div className={`${styles.content} row`}>
+                <div className={`${styles.detail} col-md-6 order-md-2 col-12`}>
+                    <div className={styles.textblock}>
+                        <p className={styles.heading}>Organising events don't have to be hard.</p>
+                        <p className={styles.subheading}>
+                            Never forget an upcoming event with automatic reminder of things occuring on the horizon!
+                        </p>
+                    </div>
+                </div>
+                <div className={`${styles.detail} col-md-6 order-md-1 col-12`}>
+                    <img alt='example' src='./event_reminder.png' width='500px' />
+                </div>
+            </div>
             <div className={styles.featuresSection}>
                 <div className={styles.content}>
-                    <h3>Features</h3>
+                    <h2>Features</h2>
                     <div className='row'>
                         <div className={`${styles.feature} col-md-6 col-12`}>
                             <img className={styles.featureIcon} alt='tick' src='./tick.png' />
