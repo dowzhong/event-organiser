@@ -40,12 +40,14 @@
 }
 
 .heading {
+    color: rgb(46, 46, 46);
     font-size: 20px;
     font-weight: 500;
     margin-bottom: 0%;
 }
 
 .subheading {
+    font-weight: 400;
     font-size: 20px;
     margin-bottom: 0%;
 }
@@ -56,6 +58,10 @@
 
 .detail .textblock {
     margin-top: 2rem;
+}
+
+.explanation {
+    font-weight: 400;
 }
 
 .introduction {

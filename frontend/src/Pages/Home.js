@@ -39,7 +39,7 @@ function Home() {
                         <div className={`${styles.feature} col-md-6 col-12`}>
                             <img className={styles.featureIcon} alt='tick' src='./tick.png' />
                             <p className={styles.heading}>Reaction based inputs</p>
-                            <p>
+                            <p className={styles.explanation}>
                                 Users can mark themselves as Going, Not Going, or Unsure simply by
                                 clicking on the provided reactions.
                         </p>
@@ -47,14 +47,14 @@ function Home() {
                         <div className={`${styles.feature} col-md-6 col-12`}>
                             <img className={styles.featureIcon} alt='reminder' src='./reminder.png' />
                             <p className={styles.heading}>Automatic reminders for upcoming events</p>
-                            <p>
+                            <p className={styles.explanation}>
                                 Attendees will be automatically reminded of upcoming events they are attending.
                         </p>
                         </div>
                         <div className={`${styles.feature} col-md-6 col-12`}>
                             <img className={styles.featureIcon} alt='role' src='./role.png' />
                             <p className={styles.heading}>Automatic role assigning for attendees</p>
-                            <p>
+                            <p className={styles.explanation}>
                                 Attendees are assigned a specially created event role to make notifying them
                                 of changes extremely easy.
                         </p>
@@ -62,9 +62,9 @@ function Home() {
                         <div className={`${styles.feature} col-md-6 col-12`}>
                             <img className={styles.featureIcon} alt='bin' src='./bin.png' />
                             <p className={styles.heading}>Automatic expiry and deletion of past events.</p>
-                            <p>
+                            <p className={styles.explanation}>
                                 Old events are deleted weekly to reduce event channel clutter.
-                        </p>
+                            </p>
                         </div>
                     </div>
                 </div>
