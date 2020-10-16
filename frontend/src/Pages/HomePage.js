@@ -34,68 +34,60 @@ function HomePage(props) {
                     </div>
                 </div>
             </div>
-            <div className={`${styles.content} row`}>
-                <div className={`${styles.detail} col-md-6 col-12 align-middle`}>
-                    <div className={`${styles.textblock}`}>
-                        <p className={styles.heading}>Organising events don't have to be hard.</p>
-                        <p className={styles.subheading}>
-                            Event Organiser bot is the Discord solution to scheduling virtual or
-                            in real life events. Quickly and simply collect attendance for any future
-                            event you have in mind!
+            <div className={styles.mainBody}>
+                <div className={`${styles.content} row`}>
+                    <div className={`${styles.detail} col-md-6 col-12 order-md-1 align-middle`}>
+                        <div className={`${styles.textblock}`}>
+                            <p className={styles.heading}>Reaction based user input.</p>
+                            <p className={styles.subheading}>
+                                Organising events don't have to be hard. Quickly and simply collect attendance for any future
+                                event you have in mind with the click of a button.
                         </p>
+                        </div>
+                    </div>
+                    <div className={`${styles.detail} col-md-6 order-md-2 col-12`}>
+                        <img className='mx-auto d-block' alt='example' src='./discord.gif' width='500px' />
                     </div>
                 </div>
-                <div className={`${styles.detail} col-md-6 col-12`}>
-                    <img className='mx-auto d-block' alt='example' src='./discord.gif' width='500px' />
-                </div>
-            </div>
-            <div className={`${styles.content} row`}>
-                <div className={`${styles.detail} col-md-6 order-md-2 col-12`}>
-                    <div className={styles.textblock}>
-                        <p className={styles.heading}>Organising events don't have to be hard.</p>
-                        <p className={styles.subheading}>
-                            Never forget an upcoming event with automatic reminder of things occuring on the horizon!
+                <div className={`${styles.content} row`}>
+                    <div className={`${styles.detail} col-md-6 order-md-2 col-12`}>
+                        <div className={styles.textblock}>
+                            <p className={styles.heading}>Organising events don't have to be hard.</p>
+                            <p className={styles.subheading}>
+                                Never forget an upcoming event with automatic reminder of things occuring on the horizon!
                         </p>
+                        </div>
+                    </div>
+                    <div className={`${styles.detail} col-md-6 order-md-1 col-12`}>
+                        <img className='mx-auto d-block' alt='example' src='./event_reminder.png' width='500px' />
                     </div>
                 </div>
-                <div className={`${styles.detail} col-md-6 order-md-1 col-12`}>
-                    <img className='mx-auto d-block' alt='example' src='./event_reminder.png' width='500px' />
+                <h2 className={styles.premiumHeader}>Premium Features</h2>
+                <div className={`${styles.content} row`}>
+                    <div className={`${styles.detail} col-md-6 order-md-1 col-12`}>
+                        <div className={styles.textblock}>
+                            <p className={styles.heading}>Automatic role assigning for attendees.</p>
+                            <p className={styles.subheading}>
+                                Attendees are assigned a specially created event role to make notifying them of changes extremely easy.
+                        </p>
+                        </div>
+                    </div>
+                    <div className={`${styles.detail} col-md-6 order-md-2 col-12`}>
+                        <img className='mx-auto d-block' alt='example' src='./roles.png' width='500px' />
+                    </div>
                 </div>
-            </div>
-            <div className={styles.featuresSection}>
-                <div className={styles.content}>
-                    <h2>Features</h2>
-                    <div className='row'>
-                        <div className={`${styles.feature} col-md-6 col-12`}>
-                            <img className={styles.featureIcon} alt='tick' src='./tick.png' />
-                            <p className={styles.heading}>Reaction based inputs</p>
-                            <p className={styles.explanation}>
-                                Users can mark themselves as Going, Not Going, or Unsure simply by
-                                clicking on the provided reactions.
+                <div className={`${styles.content} row`}>
+                    <div className={`${styles.detail} col-md-6 order-md-2 col-12`}>
+                        <div className={styles.textblock}>
+                            <p className={styles.heading}>Automatic expiry of past events.</p>
+                            <p className={styles.subheading}>
+                                Quickly find upcoming events that you might be interested in without needing to double check
+                                if the event already happened.
                         </p>
                         </div>
-                        <div className={`${styles.feature} col-md-6 col-12`}>
-                            <img className={styles.featureIcon} alt='reminder' src='./reminder.png' />
-                            <p className={styles.heading}>Automatic reminders for upcoming events</p>
-                            <p className={styles.explanation}>
-                                Attendees will be automatically reminded of upcoming events they are attending.
-                        </p>
-                        </div>
-                        <div className={`${styles.feature} col-md-6 col-12`}>
-                            <img className={styles.featureIcon} alt='role' src='./role.png' />
-                            <p className={styles.heading}>Automatic role assigning for attendees</p>
-                            <p className={styles.explanation}>
-                                Attendees are assigned a specially created event role to make notifying them
-                                of changes extremely easy.
-                        </p>
-                        </div>
-                        <div className={`${styles.feature} col-md-6 col-12`}>
-                            <img className={styles.featureIcon} alt='bin' src='./bin.png' />
-                            <p className={styles.heading}>Automatic expiry and deletion of past events.</p>
-                            <p className={styles.explanation}>
-                                Old events are deleted weekly to reduce event channel clutter.
-                            </p>
-                        </div>
+                    </div>
+                    <div className={`${styles.detail} col-md-6 order-md-1 col-12`}>
+                        <img className='mx-auto d-block' alt='example' src='./expired.png' width='500px' />
                     </div>
                 </div>
             </div>

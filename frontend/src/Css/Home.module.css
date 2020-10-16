@@ -57,9 +57,20 @@
 
 .subheading {
     color: rgb(255, 255, 255, 0.6);
-    font-weight: 400;
+    font-weight: 325;
     font-size: 20px;
     margin-bottom: 0%;
+}
+
+.mainBody {
+    margin-bottom: 10rem;
+}
+
+.premiumHeader {
+    font-weight: bold;
+    text-align: center;
+    color: white;
+    margin-top: 10rem;
 }
 
 .detail {
@@ -92,7 +103,7 @@
 }
 
 .feature {
-    text-align: center;
+    border-radius: 10px;
     min-height: 200px;
 }
 

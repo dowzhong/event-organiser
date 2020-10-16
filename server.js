@@ -63,6 +63,24 @@ app.get('/getUser', async (req, res) => {
     });
 });
 
+app.get('/getUserOwnedGuilds', async (req, res) => {
+    const { token } = req.query;
+    if (!token) {
+        res.status(403).json({
+            success: false,
+            content: 'Invalid or missing token.'
+        });
+        return;
+    }
+    const response = await request
+        .get('https://discord.com/api/users/@me/guilds')
+        .set('Authorization', token);
+    res.status(200).json({
+        success: true,
+        content: response.body.filter(partial => partial.owner)
+    });
+});
+
 app.use(function (err, req, res, next) {
     console.error(err);
     res.status(500).send('Something broke!');

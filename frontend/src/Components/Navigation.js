@@ -35,7 +35,7 @@ function Navigation(props) {
             <NavbarBrand href='#'>Event Organizer Bot</NavbarBrand>
             <NavbarToggler onClick={toggleCollapse} />
             <Collapse open={collapse} navbar>
-                <Nav navbar className="ml-auto">
+                <Nav navbar className='ml-auto'>
                     {
                         props.context.token
                             ? <Dropdown open={userDropdown} toggle={toggle} className={`d-table`}>
