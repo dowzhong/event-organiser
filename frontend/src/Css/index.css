@@ -3,3 +3,11 @@ body{
     transform: skewy(-3deg); */
     background-color: #2c2f33 !important;
 }
+
+.dropdown-menu {
+    background-color: #2c2f33 !important;
+}
+
+.dropdown-item:focus, .dropdown-item:hover {
+    background-color: #212325 !important;
+}

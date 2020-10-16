@@ -1,5 +1,9 @@
 .white {
-    color: #fff;
+    color: #fff !important;
+}
+
+.red {
+    color: rgb(241, 52, 52) !important;
 }
 
 .icon {
@@ -95,11 +99,14 @@
     background-color: #2c2f33;
 }
 
-.signin {
-    background-color: #7289da !important;
-    position: absolute;
-    top: 15px;
-    right: 15px;
+.navbarButton {
+    background-color: #3e4247 !important;
+    border-style: none;
+    border-color: #3e4247 !important;
+}
+
+.navbar {
+    background-color: #3e4247;
 }
 
 img {
@@ -110,9 +117,7 @@ img {
 @media only screen and (max-width: 600px) {
     .bannerContainer {
         padding: 10% 10%;
-        background-color: #3e4247;
     }
-
     .banner {
         margin: 20% 0%;
     }
@@ -133,12 +138,10 @@ img {
         margin-top: 2rem;
         width: 100%;
     }
+    .avatar {
+        margin-top: 0;
+    }
     .feature {
         margin-bottom: 2rem;
-    }
-    .signin {
-        position: absolute;
-        top: 20px;
-        right: 20px;
     }
 }

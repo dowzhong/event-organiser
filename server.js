@@ -33,7 +33,7 @@ app.get('/auth', async (req, res) => {
                 client_secret: process.env.DISCORD_SECRET,
                 grant_type: 'authorization_code',
                 code: req.query.code,
-                redirect_uri: 'https://48b7a0c98b1c.ngrok.io/auth',
+                redirect_uri: 'https://f58e3e4f8694.ngrok.io/auth',
                 scope: 'identify email guilds'
             })
             .type('form');
@@ -45,6 +45,28 @@ app.get('/auth', async (req, res) => {
     }
 });
 
+app.get('/getUser', async (req, res) => {
+    const { token } = req.query;
+    if (!token) {
+        res.status(403).json({
+            success: false,
+            content: 'Invalid or missing token.'
+        });
+        return;
+    }
+    const response = await request
+        .get('https://discord.com/api/users/@me')
+        .set('Authorization', token);
+    res.status(200).json({
+        success: true,
+        content: response.body
+    });
+});
+
+app.use(function (err, req, res, next) {
+    console.error(err);
+    res.status(500).send('Something broke!');
+});
 
 
 app.listen(process.env.SERVER_PORT, () => console.log('Listening on', process.env.SERVER_PORT));
