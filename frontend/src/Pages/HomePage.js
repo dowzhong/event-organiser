@@ -46,7 +46,7 @@ function HomePage(props) {
                     </div>
                 </div>
                 <div className={`${styles.detail} col-md-6 col-12`}>
-                    <img alt='example' src='./discord.gif' width='500px' />
+                    <img className='mx-auto d-block' alt='example' src='./discord.gif' width='500px' />
                 </div>
             </div>
             <div className={`${styles.content} row`}>
@@ -59,7 +59,7 @@ function HomePage(props) {
                     </div>
                 </div>
                 <div className={`${styles.detail} col-md-6 order-md-1 col-12`}>
-                    <img alt='example' src='./event_reminder.png' width='500px' />
+                    <img className='mx-auto d-block' alt='example' src='./event_reminder.png' width='500px' />
                 </div>
             </div>
             <div className={styles.featuresSection}>

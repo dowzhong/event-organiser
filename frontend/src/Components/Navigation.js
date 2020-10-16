@@ -22,7 +22,7 @@ function Navigation(props) {
     const [userDropdown, setUserDropdown] = useState(false);
     const [collapse, setCollapse] = useState(false);
     const toggle = () => setUserDropdown(!userDropdown);
-    const toggleCollapse = () => setCollapse(!collapse);    
+    const toggleCollapse = () => setCollapse(!collapse);
 
     useEffect(() => {
         console.log(props.context);
@@ -51,11 +51,11 @@ function Navigation(props) {
                                     {props.context.user.username ? props.context.user.username + ' ▾' : '-'}
                                 </DropdownToggle>
                                 <DropdownMenu right>
-                                    <DropdownItem className={styles.white}>
-                                        <Link to='/manage'>
+                                    <Link to='/manage'>
+                                        <DropdownItem className={styles.white}>
                                             Manage plan
-                                        </Link>
-                                    </DropdownItem>
+                                        </DropdownItem>
+                                    </Link>
                                     <DropdownItem className={styles.red}>Log out</DropdownItem>
                                 </DropdownMenu>
                             </Dropdown>

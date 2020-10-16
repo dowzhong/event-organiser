@@ -1,4 +1,4 @@
-body{
+body {
     /* -webkit-transform: skewy(-3deg);
     transform: skewy(-3deg); */
     background-color: #2c2f33 !important;
@@ -14,4 +14,13 @@ body{
 
 h1 {
     color: white !important;
+}
+
+a {
+    text-decoration: none !important;
+    color: white !important;
+}
+
+a:hover {
+    text-decoration: none !important;
 }
