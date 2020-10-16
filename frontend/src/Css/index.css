@@ -11,3 +11,7 @@ body{
 .dropdown-item:focus, .dropdown-item:hover {
     background-color: #212325 !important;
 }
+
+h1 {
+    color: white !important;
+}

@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from '../Css/Home.module.css';
+
+import withContext from '../Context/withContext.js';
 
 import {
     Button,
@@ -14,11 +16,19 @@ import {
     Collapse
 } from 'shards-react';
 
+import { Link } from 'react-router-dom';
+
 function Navigation(props) {
     const [userDropdown, setUserDropdown] = useState(false);
     const [collapse, setCollapse] = useState(false);
     const toggle = () => setUserDropdown(!userDropdown);
-    const toggleCollapse = () => setCollapse(!collapse);
+    const toggleCollapse = () => setCollapse(!collapse);    
+
+    useEffect(() => {
+        console.log(props.context);
+    })
+
+
 
     return (
         <Navbar type='dark' expand='md' className={styles.navbar}>
@@ -27,7 +37,7 @@ function Navigation(props) {
             <Collapse open={collapse} navbar>
                 <Nav navbar className="ml-auto">
                     {
-                        props.token
+                        props.context.token
                             ? <Dropdown open={userDropdown} toggle={toggle} className={`d-table`}>
                                 <DropdownToggle theme='dark'>
                                     <img
@@ -37,11 +47,15 @@ function Navigation(props) {
                                             width: '25px',
                                             borderRadius: '50%',
                                             marginRight: '10px'
-                                        }} src={`https://cdn.discordapp.com/avatars/${props.user.id}/${props.user.avatarHash}.png`} />
-                                    {props.user.username ? props.user.username + ' ▾' : '-'}
+                                        }} src={`https://cdn.discordapp.com/avatars/${props.context.user.id}/${props.context.user.avatarHash}.png`} />
+                                    {props.context.user.username ? props.context.user.username + ' ▾' : '-'}
                                 </DropdownToggle>
                                 <DropdownMenu right>
-                                    <DropdownItem className={styles.white}>Manage plan</DropdownItem>
+                                    <DropdownItem className={styles.white}>
+                                        <Link to='/manage'>
+                                            Manage plan
+                                        </Link>
+                                    </DropdownItem>
                                     <DropdownItem className={styles.red}>Log out</DropdownItem>
                                 </DropdownMenu>
                             </Dropdown>
@@ -60,4 +74,4 @@ function Navigation(props) {
     );
 }
 
-export default Navigation;
+export default withContext(Navigation);

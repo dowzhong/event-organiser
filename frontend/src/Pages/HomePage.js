@@ -6,55 +6,26 @@ import Navigation from '../Components/Navigation.js';
 import * as qs from 'query-string';
 import request from 'superagent';
 
-function HomePage(props) {
-    const [token, setToken] = useState(null);
-    const [user, setUser] = useState({
-        username: null,
-        id: null,
-        email: null,
-        avatarHash: null
-    });
+import withContext from '../Context/withContext.js';
 
+function HomePage(props) {
     useEffect(() => {
         const queryString = qs.parse(props.location.search);
         if (queryString.token) {
             localStorage.setItem('token', `${queryString.type} ${queryString.token}`);
             localStorage.setItem('refresh_token', queryString.refresh);
         }
-        setToken(localStorage.getItem('token'));
-
+        props.context.setToken(localStorage.getItem('token'));
     }, []);
-
-    useEffect(() => {
-        if (!token) return;
-
-        request
-            .get(process.env.REACT_APP_SERVER + '/getUser')
-            .query({
-                token: token
-            })
-            .then(res => {
-                console.log(res.body.content);
-                setUser({
-                    username: res.body.content.username,
-                    id: res.body.content.id,
-                    email: res.body.content.email,
-                    avatarHash: res.body.content.avatar
-                });
-            })
-            .catch(err => {
-                console.error(err);
-            });
-    }, [token]);
 
     return (
         <div>
-            <Navigation user={user} token={token} />
+            <Navigation user={props.context.user} token={props.context.token} />
             <div className={styles.bannerContainer + ' ' + styles.slanted}>
                 <div className={`${styles.banner} row`}>
                     <div className={`${styles.bannerItem + ' ' + styles.bannerText} col-md-6 col-12`}>
                         <div className={styles.bannerText}>
-                            <h1 className={styles.white}>Event Organisation</h1>
+                            <h1>Event Organisation</h1>
                             <h2 className={styles.faded}>All in Discord</h2>
                         </div>
                     </div>
@@ -132,4 +103,4 @@ function HomePage(props) {
     );
 }
 
-export default HomePage;
+export default withContext(HomePage);
