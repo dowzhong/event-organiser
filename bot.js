@@ -6,6 +6,7 @@ const redis = require('./redis.js');
 const Discord = require('discord.js');
 const { MessageEmbed } = require('discord.js');
 const { delAsync } = require('./redis.js');
+const database = require('./database.js');
 
 const client = new Discord.Client();
 
@@ -228,8 +229,12 @@ client.on('message', async message => {
                 date
             );
 
-            await createEventRoles(message.guild, event)
-                .catch(err => console.error('Could not create event role', eventName, err));
+            const premium = await utils.getGuildPremiumStatus(message.guild);
+            if (premium) {
+                await createEventRoles(message.guild, event)
+                    .catch(err => console.error('Could not create event role', eventName, err));
+            }
+
             await createGuildEvent(message.guild, event, descriptionReply.first().content, date);
 
             statusMsg.edit(`${message.author}, New event ***${event.name}*** created!`).catch(err => { });
@@ -304,7 +309,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
             console.error('Could not edit embed after updating member decision', err);
         });
     }
-    
+
     reaction.users.remove(user.id).catch(err => { });
 });
 
@@ -335,8 +340,7 @@ async function createGuildEvent(guild, event) {
 async function createEventRoles(guild, event) {
     const role = await guild.roles.create({
         data: {
-            name: utils.truncate(event.name),
-            mentionable: true
+            name: utils.truncate(event.name)
         },
         reason: `For event: ${event.name} `
     });

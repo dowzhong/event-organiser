@@ -24,6 +24,16 @@ function Navigation(props) {
     const toggle = () => setUserDropdown(!userDropdown);
     const toggleCollapse = () => setCollapse(!collapse);
 
+    const logout = () => {
+        props.context.setToken(null);
+        localStorage.removeItem('token');
+        window.location.replace('/');
+    };
+
+    useEffect(() => {
+        console.log(props);
+    });
+
     return (
         <Navbar type='dark' expand='md' className={styles.navbar}>
             <NavbarBrand>
@@ -51,11 +61,11 @@ function Navigation(props) {
                                 </DropdownToggle>
                                 <DropdownMenu right>
                                     <Link to='/manage'>
-                                        <DropdownItem className={styles.white}>
+                                        <DropdownItem className='white'>
                                             Manage plan
                                         </DropdownItem>
                                     </Link>
-                                    <DropdownItem className={styles.red}>Log out</DropdownItem>
+                                    <DropdownItem className='red' onClick={logout}>Log out</DropdownItem>
                                 </DropdownMenu>
                             </Dropdown>
                             : <Button

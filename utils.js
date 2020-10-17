@@ -15,6 +15,15 @@ const days = [
 const redis = require('./redis.js');
 
 module.exports = {
+    async getGuildPremiumStatus(guild) {
+        const customer = await database.Customers.findOne({
+            where: {
+                id: guild.ownerID
+            }
+        });
+        if (!customer || !customer.premium) return false;
+        return true;
+    },
     getGuild(guildId) {
         return database.Guilds.findCreateFind({
             where: {

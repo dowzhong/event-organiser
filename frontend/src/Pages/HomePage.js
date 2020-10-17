@@ -13,13 +13,15 @@ function HomePage(props) {
         const queryString = qs.parse(props.location.search);
         if (queryString.token) {
             localStorage.setItem('token', queryString.token);
+            window.location.replace('/');
+            return;
         }
         props.context.setToken(localStorage.getItem('token'));
     }, []);
 
     return (
         <div>
-            <Navigation user={props.context.user} token={props.context.token} />
+            <Navigation />
             <div className={styles.bannerContainer + ' ' + styles.slanted}>
                 <div className={`${styles.banner} row`}>
                     <div className={`${styles.bannerItem + ' ' + styles.bannerText} col-md-6 col-12`}>
@@ -61,7 +63,7 @@ function HomePage(props) {
                         <img className='mx-auto d-block' alt='example' src='./event_reminder.png' width='500px' />
                     </div>
                 </div>
-                <h2 className={styles.premiumHeader}>Premium Features</h2>
+                <h2 id='premiumFeatures' className={styles.premiumHeader}>Premium Features</h2>
                 <div className={`${styles.content} row`}>
                     <div className={`${styles.detail} col-md-6 order-md-1 col-12`}>
                         <div className={styles.textblock}>

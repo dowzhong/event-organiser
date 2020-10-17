@@ -57,22 +57,23 @@ app.get('/auth', async (req, res) => {
             .get('https://discord.com/api/users/@me')
             .set('Authorization', `${response.body.token_type} ${response.body.access_token}`);
 
-        const [customer] = await database.Customers.findCreateFind({
-            where: {
-                id: user.id
-            },
-            defaults: {
-                id: user.id,
-                stripeCustomerId: null,
-                premium: false
-            }
-        });
-
-        const token = await jwt.asyncSign({
-            ...user,
-            stripeCustomerId: customer.stripeCustomerId,
-            premium: customer.premium
-        });
+        const token = await jwt.asyncSign(user);
+        /*
+        {
+            id: '177019589010522112',
+            username: 'baz',
+            avatar: '334394a5f6ee8a3fb67909b3307bedee',
+            discriminator: '1981',
+            public_flags: 131328,
+            flags: 131328,
+            email: 'dowzhong@gmail.com',
+            verified: true,
+            locale: 'en-US',
+            mfa_enabled: true,
+            stripeCustomerId: null,
+            premium: false
+        }
+        */
         res.redirect(process.env.FRONTEND + '/?token=' + token);
     } catch (err) {
         console.error(err);
@@ -81,17 +82,24 @@ app.get('/auth', async (req, res) => {
 });
 
 app.get('/getUser', hasToken, async (req, res) => {
-    try {
-        res.json({
-            success: true,
-            content: req.user
-        });
-    } catch (err) {
-        res.status(403).json({
-            success: false,
-            content: 'Invalid token'
-        });
-    }
+    const [customer] = await database.Customers.findCreateFind({
+        where: {
+            id: req.user.id
+        },
+        defaults: {
+            id: req.user.id,
+            stripeCustomerId: null,
+            premium: false
+        }
+    });
+    res.json({
+        success: true,
+        content: {
+            ...req.user,
+            stripeCustomerId: customer.stripeCustomerId,
+            premium: customer.premium
+        }
+    });
 });
 
 app.use(function (err, req, res, next) {

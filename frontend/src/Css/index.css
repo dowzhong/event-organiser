@@ -24,3 +24,15 @@ a {
 a:hover {
     text-decoration: none !important;
 }
+
+.white {
+    color: #fff !important;
+}
+
+.red {
+    color: rgb(241, 52, 52) !important;
+}
+
+ul {
+    list-style-position: inside;
+}

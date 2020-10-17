@@ -14,7 +14,8 @@ function App() {
         username: null,
         id: null,
         email: null,
-        avatarHash: null
+        avatarHash: null,
+        premium: null
     });
 
     useEffect(() => {
@@ -34,7 +35,8 @@ function App() {
                     username: res.body.content.username,
                     id: res.body.content.id,
                     email: res.body.content.email,
-                    avatarHash: res.body.content.avatar
+                    avatarHash: res.body.content.avatar,
+                    premium: res.body.content.premium
                 });
             })
             .catch(err => {

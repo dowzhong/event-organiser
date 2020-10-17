@@ -5,6 +5,8 @@ const router = express.Router();
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET);
 
+const database = require('../../database.js');
+
 const hasToken = require('../middleware/hasToken');
 
 router.get('/checkout-session', async (req, res) => {
@@ -25,6 +27,7 @@ router.post('/create-checkout-session', hasToken, async (req, res) => {
                     quantity: 1,
                 }
             ],
+            customer_email: req.user.email,
             metadata: {
                 discordId: req.user.id
             },
@@ -86,7 +89,34 @@ router.post('/webhook', async (req, res) => {
 
     if (eventType === 'checkout.session.completed') {
         console.log(`🔔  Payment received!`);
-        console.log(data);
+        await database.Customers.update({
+            stripeCustomerId: data.object.customer,
+            premium: true
+        }, {
+            where: {
+                id: data.object.metadata.discordId
+            }
+        });
+    }
+
+    if (eventType === 'invoice.payment_failed') {
+        await database.Customers.update({
+            premium: false
+        }, {
+            where: {
+                id: data.object.metadata.discordId
+            }
+        });
+    }
+
+    if (eventType === 'customer.subscription.deleted') {
+        await database.Customers.update({
+            premium: false
+        }, {
+            where: {
+                id: data.object.metadata.discordId
+            }
+        });
     }
 
     res.sendStatus(200);
