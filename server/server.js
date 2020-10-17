@@ -1,7 +1,9 @@
 require('dotenv').config();
 
+const jwt = require('./jwt.js');
 const request = require('superagent');
-const app = require('express')();
+const express = require('express');
+const app = express();
 
 const helmet = require('helmet');
 const cors = require('cors');
@@ -11,10 +13,20 @@ const bodyParser = require('body-parser');
 app.use(cors());
 app.use(helmet());
 
-app.use(bodyParser.json());
+app.use((req, res, next) => {
+    if (req.originalUrl.startsWith('/stripe/webhook')) {
+        bodyParser.raw({ type: 'application/json' })(req, res, next);
+        return;
+    }
+    bodyParser.json()(req, res, next);
+});
 app.use(bodyParser.urlencoded({
     extended: true
 }));
+
+const hasToken = require('./middleware/hasToken.js');
+
+app.use('/stripe', require('./router/stripe.js'));
 
 app.get('/auth', async (req, res) => {
     if (req.query.error) {
@@ -33,52 +45,35 @@ app.get('/auth', async (req, res) => {
                 client_secret: process.env.DISCORD_SECRET,
                 grant_type: 'authorization_code',
                 code: req.query.code,
-                redirect_uri: 'https://f58e3e4f8694.ngrok.io/auth',
+                redirect_uri: 'https://4121f7f0fc66.ngrok.io/auth',
                 scope: 'identify email guilds'
             })
             .type('form');
-        res.redirect(process.env.FRONTEND + `/?token=${response.body.access_token}&refresh=${response.body.refresh_token}`
-            + `&type=${response.body.token_type}`);
+
+        const { body: user } = await request
+            .get('https://discord.com/api/users/@me')
+            .set('Authorization', `${response.body.token_type} ${response.body.access_token}`);
+
+        const token = await jwt.asyncSign(user);
+        res.redirect(process.env.FRONTEND + '/?token=' + token);
     } catch (err) {
         console.error(err);
         res.redirect(process.env.FRONTEND + `/?error=${err}`);
     }
 });
 
-app.get('/getUser', async (req, res) => {
-    const { token } = req.query;
-    if (!token) {
+app.get('/getUser', hasToken, async (req, res) => {
+    try {
+        res.json({
+            success: true,
+            content: req.user
+        });
+    } catch (err) {
         res.status(403).json({
             success: false,
-            content: 'Invalid or missing token.'
+            content: 'Invalid token'
         });
-        return;
     }
-    const response = await request
-        .get('https://discord.com/api/users/@me')
-        .set('Authorization', token);
-    res.status(200).json({
-        success: true,
-        content: response.body
-    });
-});
-
-app.get('/getUserOwnedGuilds', async (req, res) => {
-    const { token } = req.query;
-    if (!token) {
-        res.status(403).json({
-            success: false,
-            content: 'Invalid or missing token.'
-        });
-        return;
-    }
-    const response = await request
-        .get('https://discord.com/api/users/@me/guilds')
-        .set('Authorization', token);
-    res.status(200).json({
-        success: true,
-        content: response.body.filter(partial => partial.owner)
-    });
 });
 
 app.use(function (err, req, res, next) {

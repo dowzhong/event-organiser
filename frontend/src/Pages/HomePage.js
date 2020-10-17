@@ -12,8 +12,7 @@ function HomePage(props) {
     useEffect(() => {
         const queryString = qs.parse(props.location.search);
         if (queryString.token) {
-            localStorage.setItem('token', `${queryString.type} ${queryString.token}`);
-            localStorage.setItem('refresh_token', queryString.refresh);
+            localStorage.setItem('token', queryString.token);
         }
         props.context.setToken(localStorage.getItem('token'));
     }, []);

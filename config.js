@@ -17,5 +17,6 @@ module.exports = {
         orangeError: 0xff781f,
         redError: 0xff0033
     },
-    botMessageTimeout: 1000 * 60 * 2
+    botMessageTimeout: 1000 * 60 * 2,
+    premiumPlanId: 'price_1Hd7x7GWiTk0G7fDEgkpsJ55'
 };

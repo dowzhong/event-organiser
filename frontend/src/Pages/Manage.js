@@ -1,31 +1,46 @@
 import React, { useEffect, useState } from 'react';
 
+import { loadStripe } from '@stripe/stripe-js';
+
+import { Button } from 'shards-react';
+
 import Navigation from '../Components/Navigation.js';
 
 import request from 'superagent';
 
 import withContext from '../Context/withContext.js';
 
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC);
+
 function Manage(props) {
-    const [ownedGuilds, setOwnedGuilds] = useState([]);
+    const createCheckoutSession = async () => {
+        const stripe = await stripePromise;
 
-    useEffect(() => {
-        if (!props.context.token) return;
+        const response = await request
+            .post(process.env.REACT_APP_SERVER + '/stripe/create-checkout-session')
+            .send({ token: props.context.token });
 
-        request
-            .get(process.env.REACT_APP_SERVER + '/getUserOwnedGuilds')
-            .query({ token: props.context.token })
-            .then(response => setOwnedGuilds(response.body.content))
-            .catch(err => console.error(err));
-    }, [props.context.token]);
+        const result = await stripe.redirectToCheckout({
+            sessionId: response.body.sessionId,
+        });
+
+        if (result.error) console.error(result.error);
+    };
+
+    const createPortalSession = async () => {
+        const response = await request
+            .post(process.env.REACT_APP_SERVER + '/stripe/customer-portal')
+            .send({ token: props.context.token });
+
+        window.location = response.body.url;
+    };
 
     return (
         <div>
             <Navigation user={props.context.user} token={props.context.token} />
-            <h1>Guilds</h1>
-            {
-                ownedGuilds.map(guild => <p>{guild.name}</p>)
-            }
+            <Button onClick={createCheckoutSession}>Stripe</Button>
+            <p />
+            <Button onClick={createPortalSession}>Portal</Button>
         </div>
     );
 }
