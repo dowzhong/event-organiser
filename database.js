@@ -6,6 +6,7 @@ const sequelize = new Sequelize('event-organiser', process.env.DB_USER, process.
     logging: false
 });
 
+const Customers = require('./models/Customers.js')(sequelize, Sequelize.DataTypes);
 const EventParticipants = require('./models/EventParticipants.js')(sequelize, Sequelize.DataTypes);
 const EventPosts = require('./models/EventPosts.js')(sequelize, Sequelize.DataTypes);
 const Events = require('./models/Events.js')(sequelize, Sequelize.DataTypes);
@@ -40,6 +41,7 @@ Events.prototype.deleteParticipant = async function (id, decision) {
 }
 
 module.exports = {
+    Customers,
     EventPosts,
     Events,
     Guilds,
