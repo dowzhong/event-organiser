@@ -36,3 +36,7 @@ a:hover {
 ul {
     list-style-position: inside;
 }
+
+h1 {
+    font-weight: bold;
+}

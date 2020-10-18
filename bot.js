@@ -79,11 +79,11 @@ client.on('message', async message => {
         if (args.length < 3) {
             await message.reply({
                 embed: new MessageEmbed()
-                    .setDescription(`Please use the command like: \`${config.prefix}editevent {event id} {name|date|description} {new info}\``)
+                    .setDescription(`Please use the command like: \`${config.prefix}edit {event id} {name|date|description} {new info}\``)
                     .addField('Example',
-                        `${config.prefix}editevent 13 name New Event Name
-                        ${config.prefix}editevent 13 date 20/10/2021 13:00
-                        ${config.prefix}editevent 13 description New Description`)
+                        `${config.prefix}edit 13 name New Event Name
+                        ${config.prefix}edit 13 date 20/10/2021 13:00
+                        ${config.prefix}edit 13 description New Description`)
                     .setColor(config.colors.orangeError)
             })
                 .catch(err => { });
@@ -98,9 +98,9 @@ client.on('message', async message => {
                 embed: new MessageEmbed()
                     .setTitle(`2nd argument (field) must be one of \`name, date, description\`.`)
                     .addField('Example',
-                        `${config.prefix}editevent 13 name New Event Name
-                        ${config.prefix}editevent 13 date 20/10/2021 13:00
-                        ${config.prefix}editevent 13 description New Description`)
+                        `${config.prefix}edit 13 name New Event Name
+                        ${config.prefix}edit 13 date 20/10/2021 13:00
+                        ${config.prefix}edit 13 description New Description`)
                     .setColor(config.colors.orangeError)
             })
                 .catch(err => { });
@@ -142,7 +142,7 @@ client.on('message', async message => {
         }
 
         try {
-            await utils.editEvent(event, field, info);
+            await utils.edit(event, field, info);
 
             const { allEvents } = utils.getEventsChannels(message.guild);
             if (!allEvents) return;

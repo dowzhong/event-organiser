@@ -48,7 +48,7 @@ client.once('ready', async () => {
             const postedEvent = await allEvents.messages.fetch(post.id).catch(err => null);
 
             const reminder = new MessageEmbed()
-                .setTitle(`Hey peeps, just a reminder that your event* **${event.name}*** is coming up tomorrow!`)
+                .setTitle(`Hey peeps, just a reminder that your event ***${event.name}*** is coming up tomorrow!`)
                 .addField('Event', `**[Link](${postedEvent ? postedEvent.url : '-'})**`)
                 .setColor(config.colors.active)
 
