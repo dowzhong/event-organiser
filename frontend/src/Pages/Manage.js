@@ -14,9 +14,14 @@ import withContext from '../Context/withContext.js';
 
 import styles from '../Css/Manage.module.css';
 
+import { useToasts } from 'react-toast-notifications';
+
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC);
 
+
 function Manage(props) {
+    const { addToast } = useToasts();
+
     const createCheckoutSession = async () => {
         const stripe = await stripePromise;
 
@@ -28,7 +33,12 @@ function Manage(props) {
             sessionId: response.body.sessionId,
         });
 
-        if (result.error) console.error(result.error);
+        if (result.error) {
+            addToast('An issue was encountered while creating your checkout session. Please try again later.', {
+                appearance: 'error',
+                autoDismiss: false,
+            });
+        };
     };
 
     const createPortalSession = async () => {

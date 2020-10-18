@@ -12,6 +12,7 @@
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
+    "react-toast-notifications": "^2.4.0",
     "shards-react": "^1.0.3",
     "superagent": "^6.1.0"
   },

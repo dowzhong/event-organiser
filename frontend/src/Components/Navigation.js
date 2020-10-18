@@ -35,7 +35,7 @@ function Navigation(props) {
             <NavbarBrand>
                 <Link
                     to='/'>
-                    Event Organizer Bot
+                    Event Organiser Bot
                 </Link>
             </NavbarBrand>
             <NavbarToggler onClick={toggleCollapse} />

@@ -14,6 +14,14 @@ module.exports = async (req, res, next) => {
         });
         return;
     }
-    req.user = await jwt.asyncVerify(token);
-    next();
+    try {
+        req.user = await jwt.asyncVerify(token);
+        next();
+    } catch (err) {
+        res.status(403).json({
+            success: false,
+            content: 'Invalid or missing token.'
+        });
+        return;
+    }
 }

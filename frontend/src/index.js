@@ -4,12 +4,16 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import './Css/index.css';
 
+import { ToastProvider } from 'react-toast-notifications'
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css";
 
 ReactDOM.render(
     <React.StrictMode>
-        <App />
+        <ToastProvider>
+            <App />
+        </ToastProvider>
     </React.StrictMode>,
     document.getElementById('root')
 );

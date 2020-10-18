@@ -5,6 +5,8 @@ import Context from './Context/Context.js';
 
 import HomePage from './Pages/HomePage.js';
 import Manage from './Pages/Manage.js';
+import { useToasts } from 'react-toast-notifications'
+
 
 import request from 'superagent';
 
@@ -17,6 +19,8 @@ function App() {
         avatarHash: null,
         premium: null
     });
+
+    const { addToast } = useToasts();
 
     useEffect(() => {
         setToken(localStorage.getItem('token'));
@@ -40,6 +44,11 @@ function App() {
                 });
             })
             .catch(err => {
+                if (err.status === 403) {
+                    localStorage.removeItem('token');
+                    window.location.replace(process.env.REACT_APP_DISCORD_AUTH);
+                    return;
+                }
                 console.error(err);
             });
     }, [token]);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, createRef } from 'react';
 import styles from '../Css/Home.module.css';
 
 import Navigation from '../Components/Navigation.js';
@@ -63,7 +63,7 @@ function HomePage(props) {
                         <img className='mx-auto d-block' alt='example' src='./event_reminder.png' width='500px' />
                     </div>
                 </div>
-                <h2 id='premiumFeatures' className={styles.premiumHeader}>Premium Features</h2>
+                <h2 id='premiumFeatures' className={styles.premiumHeader}>Unlock additional features for $5/mo!</h2>
                 <div className={`${styles.content} row`}>
                     <div className={`${styles.detail} col-md-6 order-md-1 col-12`}>
                         <div className={styles.textblock}>
@@ -92,7 +92,7 @@ function HomePage(props) {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
 

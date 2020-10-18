@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const jwt = require('./jwt.js');
 const request = require('superagent');
 const express = require('express');
@@ -55,7 +57,7 @@ app.get('/auth', async (req, res) => {
             .get('https://discord.com/api/users/@me')
             .set('Authorization', `${response.body.token_type} ${response.body.access_token}`);
 
-        const token = await jwt.asyncSign(user);
+        const token = await jwt.asyncSign(user, { expiresIn: '7d' });
         /*
         {
             id: '177019589010522112',
