@@ -1,10 +1,9 @@
-import React, { useEffect, createRef } from 'react';
+import React, { useEffect } from 'react';
 import styles from '../Css/Home.module.css';
 
 import Navigation from '../Components/Navigation.js';
 
 import * as qs from 'query-string';
-import request from 'superagent';
 
 import withContext from '../Context/withContext.js';
 

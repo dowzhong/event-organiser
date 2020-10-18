@@ -4,8 +4,6 @@ import { loadStripe } from '@stripe/stripe-js';
 
 import { Button } from 'shards-react';
 
-import { Link } from 'react-router-dom';
-
 import Navigation from '../Components/Navigation.js';
 
 import request from 'superagent';
@@ -70,14 +68,14 @@ function Manage(props) {
                                 You're currently on the <strong>free</strong> plan.
                             </h2>,
                             <p>
-                                If you'd like to show us some support, please upgrade to premium!
+                                If you'd like to show us some support, please upgrade to premium for <strong>$5/month</strong>!
                                 With premium, you get extra quality of life features such as:
                                 <ul>
                                     <li>Auto create and assign pingable roles to members who are marked as going</li>
                                     <li>Auto deletion of expired events</li>
                                 </ul>
                             </p>,
-                            <Button onClick={createCheckoutSession}>Upgrade to premium</Button>
+                            <Button onClick={createCheckoutSession}>Upgrade to premium for $5/mo</Button>
                         ]
                 }
             </div>

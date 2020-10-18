@@ -4,9 +4,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Context from './Context/Context.js';
 
 import HomePage from './Pages/HomePage.js';
-import Manage from './Pages/Manage.js';
-import { useToasts } from 'react-toast-notifications'
-
+import Manage from './Pages/Manage.js'; 
 
 import request from 'superagent';
 
@@ -19,8 +17,6 @@ function App() {
         avatarHash: null,
         premium: null
     });
-
-    const { addToast } = useToasts();
 
     useEffect(() => {
         setToken(localStorage.getItem('token'));
