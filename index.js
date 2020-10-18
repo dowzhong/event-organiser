@@ -1,5 +1,6 @@
 require('dotenv').config();
 const client = require('./bot.js');
+const server = require('./server/server.js');
 
 const { MessageEmbed, Message } = require('discord.js');
 

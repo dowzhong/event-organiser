@@ -88,7 +88,6 @@ router.post('/webhook', async (req, res) => {
     }
 
     if (eventType === 'checkout.session.completed') {
-        console.log(`🔔  Payment received!`);
         await database.Customers.update({
             stripeCustomerId: data.object.customer,
             premium: true

@@ -30,10 +30,6 @@ function Navigation(props) {
         window.location.replace('/');
     };
 
-    useEffect(() => {
-        console.log(props);
-    });
-
     return (
         <Navbar type='dark' expand='md' className={styles.navbar}>
             <NavbarBrand>

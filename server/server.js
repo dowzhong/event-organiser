@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 const jwt = require('./jwt.js');
 const request = require('superagent');
 const express = require('express');
@@ -48,7 +46,7 @@ app.get('/auth', async (req, res) => {
                 client_secret: process.env.DISCORD_SECRET,
                 grant_type: 'authorization_code',
                 code: req.query.code,
-                redirect_uri: 'https://4121f7f0fc66.ngrok.io/auth',
+                redirect_uri: process.env.DISCORD_REDIRECT,
                 scope: 'identify email guilds'
             })
             .type('form');
