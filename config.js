@@ -18,5 +18,5 @@ module.exports = {
         redError: 0xff0033
     },
     botMessageTimeout: 1000 * 60 * 2,
-    premiumPlanId: 'price_1Hd7x7GWiTk0G7fDEgkpsJ55'
+    premiumPlanId: 'price_1HdzkGGWiTk0G7fDdH4SBsEa'
 };
