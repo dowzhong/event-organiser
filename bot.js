@@ -313,7 +313,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
     reaction.users.remove(user.id).catch(err => { });
 });
 
-client.ong('guildCreate', guild => {
+client.on('guildCreate', guild => {
     if (!guild.owner) return;
 
     {
