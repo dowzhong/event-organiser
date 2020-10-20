@@ -27,8 +27,8 @@ function HomePage(props) {
                 <div className={`${styles.banner}`}>
                     <div className={`${styles.bannerItem + ' ' + styles.bannerText}`}>
                         <div className={styles.bannerText}>
-                            <h1>The solution to your scheduling troubles.</h1>
-                            <h3 className={styles.faded}>Event scheduling, logistics, attendance<br/> All in Discord.</h3>
+                            <h1 style={{lineHeight: '1.2'}}>The solution to your scheduling troubles.</h1>
+                            <h3 className={styles.faded}>Event scheduling, logistics, attendance.<br/> All in Discord.</h3>
                         </div>
                         <Button 
                         onClick={() => {

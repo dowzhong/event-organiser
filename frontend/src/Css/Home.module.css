@@ -10,6 +10,7 @@
     padding: 10% 15%;
     background-color: #3e4247;
     vertical-align: middle;
+    background-image: url('/grainbg.png');
 }
 
 .banner {
