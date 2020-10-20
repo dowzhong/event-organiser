@@ -40,7 +40,7 @@ function Manage(props) {
     };
 
     useEffect(() => {
-        if (!props.context.token)
+        if (!localStorage.getItem('token'))
             window.location.replace(process.env.REACT_APP_DISCORD_AUTH);
     }, []);
 
