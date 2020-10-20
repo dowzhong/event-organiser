@@ -319,7 +319,7 @@ client.on('guildCreate', guild => {
     {
         guild.owner.send({
             embed: new MessageEmbed()
-                .setDescription(`Hey there! I have just been added to ${guild.name}.`
+                .setDescription(`Hey there! I have just been added to ${guild.name}. `
                     + `Please set the timezone for your server with \`${config.prefix}setutc {offset}\` \neg \`${config.prefix}setutc 11\` \nbefore you create any events.`)
                 .addField('Manage your plan and check out my commands:', 'https://event-bot.weeb.tools')
                 .setColor(config.colors.active)
