@@ -27,8 +27,8 @@ function HomePage(props) {
                 <div className={`${styles.banner}`}>
                     <div className={`${styles.bannerItem + ' ' + styles.bannerText}`}>
                         <div className={styles.bannerText}>
-                            <h1>The solution to your IRL meetups.</h1>
-                            <h3 className={styles.faded}>Event scheduling, logistics, attendance. <br/> All in Discord.</h3>
+                            <h1>The solution to your scheduling troubles.</h1>
+                            <h3 className={styles.faded}>Event scheduling, logistics, attendance<br/> All in Discord.</h3>
                         </div>
                         <Button 
                         onClick={() => {
@@ -44,11 +44,11 @@ function HomePage(props) {
                 <div className={`${styles.content} row`}>
                     <div className={`${styles.detail} col-md-6 col-12 order-md-1 align-middle`}>
                         <div className={`${styles.textblock}`}>
-                            <p className={styles.heading}>Reaction based user input.</p>
+                            <p className={styles.heading}>Reaction-based user input.</p>
                             <p className={styles.subheading}>
-                                Organising events don't have to be hard. Quickly and simply collect attendance for any future
-                                event you have in mind with the click of a button.
-                        </p>
+                                Make attendance collection frictionless for all participants. Simply click on a reaction
+                                to mark yourself as going, not going, or even unsure.
+                            </p>
                         </div>
                     </div>
                     <div className={`${styles.detail} col-md-6 order-md-2 col-12`}>
@@ -58,9 +58,9 @@ function HomePage(props) {
                 <div className={`${styles.content} row`}>
                     <div className={`${styles.detail} col-md-6 order-md-2 col-12`}>
                         <div className={styles.textblock}>
-                            <p className={styles.heading}>Organising events don't have to be hard.</p>
+                            <p className={styles.heading}>Organising events doesn't have to be hard.</p>
                             <p className={styles.subheading}>
-                                Never forget an upcoming event with automatic reminder of things occuring on the horizon!
+                                Never forget an upcoming event with automatic reminders of things occuring on the horizon!
                         </p>
                         </div>
                     </div>
