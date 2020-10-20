@@ -237,7 +237,9 @@ client.on('message', async message => {
 
             await createGuildEvent(message.guild, event, descriptionReply.first().content, date);
 
-            statusMsg.edit(`${message.author}, New event ***${event.name}*** created!`).catch(err => { });
+            statusMsg.edit(`${message.author}, New event ***${event.name}*** created! ` +
+                `\nBy default, anyone can create or edit events. To lock this, create a role called \`Event Organiser\` and assign it accordingly.`)
+                .catch(err => { });
         } catch (err) {
             awaitingMessage.delete(message.author.id);
             utils.deleteEvent({ guildId: message.guild.id, name: eventName }).catch(err => { });
