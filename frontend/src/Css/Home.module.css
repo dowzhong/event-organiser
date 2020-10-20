@@ -1,5 +1,5 @@
 .icon {
-    border-radius: 50%;
+    border-radius: 50% !important;
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -9,6 +9,7 @@
 .bannerContainer {
     padding: 10% 15%;
     background-color: #3e4247;
+    vertical-align: middle;
 }
 
 .banner {
@@ -20,7 +21,7 @@
 }
 
 .bannerItem {
-    width: 10px !important;
+    text-align: center;
 }
 
 .bannerText {
@@ -71,6 +72,12 @@
     margin-left: auto;
 }
 
+.discordAdd {
+    background-color: #5877e7 !important;
+    font-weight: bold !important;
+    height: 3rem;
+}
+
 .explanation {
     color: rgb(255, 255, 255, 0.6);
     font-weight: 400;
@@ -117,7 +124,7 @@
     background-color: #3e4247;
 }
 
-img {
+.showcase {
     border-radius: 10px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }

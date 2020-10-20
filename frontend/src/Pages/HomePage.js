@@ -7,6 +7,8 @@ import * as qs from 'query-string';
 
 import withContext from '../Context/withContext.js';
 
+import { Button } from 'shards-react';
+
 function HomePage(props) {
     useEffect(() => {
         const queryString = qs.parse(props.location.search);
@@ -22,15 +24,15 @@ function HomePage(props) {
         <div>
             <Navigation />
             <div className={styles.bannerContainer + ' ' + styles.slanted}>
-                <div className={`${styles.banner} row`}>
-                    <div className={`${styles.bannerItem + ' ' + styles.bannerText} col-md-6 col-12`}>
+                <div className={`${styles.banner}`}>
+                    <div className={`${styles.bannerItem + ' ' + styles.bannerText}`}>
                         <div className={styles.bannerText}>
-                            <h1>Event Organisation</h1>
-                            <h2 className={styles.faded}>All in Discord</h2>
+                            <h1>The solution to your IRL meetups.</h1>
+                            <h3 className={styles.faded}>Event scheduling, logistics, attendance. <br/> All in Discord.</h3>
                         </div>
-                    </div>
-                    <div className={`${styles.bannerItem} col-md-6 col-12`}>
-                        <img className={styles.icon} alt='example' src='./icon.png' />
+                        <Button className={styles.discordAdd}>
+                            Add to Discord
+                        </Button>
                     </div>
                 </div>
             </div>
@@ -46,7 +48,7 @@ function HomePage(props) {
                         </div>
                     </div>
                     <div className={`${styles.detail} col-md-6 order-md-2 col-12`}>
-                        <img className='mx-auto d-block' alt='example' src='./discord.gif' width='500px' />
+                        <img className={`mx-auto d-block ${styles.showcase}`} alt='example' src='./discord.gif' width='500px' />
                     </div>
                 </div>
                 <div className={`${styles.content} row`}>
@@ -59,7 +61,7 @@ function HomePage(props) {
                         </div>
                     </div>
                     <div className={`${styles.detail} col-md-6 order-md-1 col-12`}>
-                        <img className='mx-auto d-block' alt='example' src='./event_reminder.png' width='500px' />
+                        <img className={`mx-auto d-block ${styles.showcase}`} alt='example' src='./event_reminder.png' width='500px' />
                     </div>
                 </div>
                 <h2 id='premiumFeatures' className={styles.premiumHeader}>Unlock additional features for $5/mo!</h2>
@@ -73,7 +75,7 @@ function HomePage(props) {
                         </div>
                     </div>
                     <div className={`${styles.detail} col-md-6 order-md-2 col-12`}>
-                        <img className='mx-auto d-block' alt='example' src='./roles.png' width='500px' />
+                        <img className={`mx-auto d-block ${styles.showcase}`} alt='example' src='./roles.png' width='500px' />
                     </div>
                 </div>
                 <div className={`${styles.content} row`}>
@@ -87,7 +89,7 @@ function HomePage(props) {
                         </div>
                     </div>
                     <div className={`${styles.detail} col-md-6 order-md-1 col-12`}>
-                        <img className='mx-auto d-block' alt='example' src='./expired.png' width='500px' />
+                        <img className={`mx-auto d-block ${styles.showcase}`} alt='example' src='./expired.png' width='500px' />
                     </div>
                 </div>
             </div>

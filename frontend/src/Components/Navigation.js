@@ -13,6 +13,7 @@ import {
     NavbarToggler,
     NavbarBrand,
     Nav,
+    NavLink,
     Collapse
 } from 'shards-react';
 
