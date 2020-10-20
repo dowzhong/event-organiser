@@ -30,7 +30,11 @@ function HomePage(props) {
                             <h1>The solution to your IRL meetups.</h1>
                             <h3 className={styles.faded}>Event scheduling, logistics, attendance. <br/> All in Discord.</h3>
                         </div>
-                        <Button className={styles.discordAdd}>
+                        <Button 
+                        onClick={() => {
+                            window.location = process.env.REACT_APP_BOT_INSTALL
+                        }}
+                        className={styles.discordAdd}>
                             Add to Discord
                         </Button>
                     </div>

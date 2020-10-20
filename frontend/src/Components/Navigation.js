@@ -41,6 +41,13 @@ function Navigation(props) {
             </NavbarBrand>
             <NavbarToggler onClick={toggleCollapse} />
             <Collapse open={collapse} navbar>
+
+                <NavLink active href="#">
+                    <Link
+                        to='/commands'>
+                        Commands
+                    </Link>
+                </NavLink>
                 <Nav navbar className='ml-auto'>
                     {
                         props.context.token && props.context.user.avatarHash

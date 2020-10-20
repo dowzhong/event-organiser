@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Redirect } from 'react-router-dom';
+
 import { loadStripe } from '@stripe/stripe-js';
 
 import { Button } from 'shards-react';
@@ -38,6 +40,11 @@ function Manage(props) {
             });
         };
     };
+
+    useEffect(() => {
+        if (!props.context.token)
+            window.location.replace(process.env.REACT_APP_DISCORD_AUTH);
+    }, []);
 
     const createPortalSession = async () => {
         const response = await request

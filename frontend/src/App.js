@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import Context from './Context/Context.js';
 
+import Commands from './Pages/Commands.js'; 
 import HomePage from './Pages/HomePage.js';
 import Manage from './Pages/Manage.js'; 
 
@@ -58,6 +59,7 @@ function App() {
         }}>
             <BrowserRouter>
                 <Switch>
+                    <Route path='/commands' component={Commands} />
                     <Route path='/manage' component={Manage} />
                     <Route path='/' component={HomePage} />
                 </Switch>
