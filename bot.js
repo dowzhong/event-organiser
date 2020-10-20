@@ -323,7 +323,7 @@ client.on('guildCreate', guild => {
                     + `Please set the timezone for your server with \`${config.prefix}setutc {offset}\` \neg \`${config.prefix}setutc 11\` \nbefore you create any events.`)
                 .addField('Manage your plan and check out my commands:', 'https://event-bot.weeb.tools')
                 .setColor(config.colors.active)
-        }).catch(err => { console.error(err) });
+        }).catch(err => { });
     }
 });
 
