@@ -1,6 +1,4 @@
-import React from 'react';
-
-import { Redirect } from 'react-router-dom';
+import React, { useEffect } from 'react';
 
 import { loadStripe } from '@stripe/stripe-js';
 
