@@ -27,14 +27,14 @@ function HomePage(props) {
                 <div className={`${styles.banner}`}>
                     <div className={`${styles.bannerItem + ' ' + styles.bannerText}`}>
                         <div className={styles.bannerText}>
-                            <h1 style={{ lineHeight: '1.2' }}>The solution to your scheduling troubles.</h1>
-                            <h3 className={styles.faded}>Event scheduling, logistics, attendance.<br /> All in Discord.</h3>
+                            <h1 style={{lineHeight: '1.2'}}>The solution to your scheduling troubles.</h1>
+                            <h3 className={styles.faded}>Event scheduling, logistics, attendance.<br/> All in Discord.</h3>
                         </div>
-                        <Button
-                            onClick={() => {
-                                window.location = process.env.REACT_APP_BOT_INSTALL
-                            }}
-                            className={styles.discordAdd}>
+                        <Button 
+                        onClick={() => {
+                            window.location = process.env.REACT_APP_BOT_INSTALL
+                        }}
+                        className={styles.discordAdd}>
                             Add to Discord
                         </Button>
                     </div>
@@ -42,7 +42,7 @@ function HomePage(props) {
             </div>
             <div className={styles.mainBody}>
                 <div className={`${styles.content} row`}>
-                    <div className={`${styles.detail} col-sm-6 col-12 order-sm-1 align-middle`}>
+                    <div className={`${styles.detail} col-md-6 col-12 order-md-1 align-middle`}>
                         <div className={`${styles.textblock}`}>
                             <p className={styles.heading}>Reaction-based user input.</p>
                             <p className={styles.subheading}>
@@ -51,13 +51,12 @@ function HomePage(props) {
                             </p>
                         </div>
                     </div>
-                    <div className={`${styles.detail} col-sm-6 order-sm-2 col-12`}>
+                    <div className={`${styles.detail} col-md-6 order-md-2 col-12`}>
                         <img className={`mx-auto d-block ${styles.showcase}`} alt='example' src='./discord.gif' width='500px' />
                     </div>
                 </div>
-                <h2 id='premiumFeatures' className={styles.premiumHeader}>Unlock additional features for $5/mo!</h2>
                 <div className={`${styles.content} row`}>
-                    <div className={`${styles.detail} col-sm-6 order-sm-2 col-12`}>
+                    <div className={`${styles.detail} col-md-6 order-md-2 col-12`}>
                         <div className={styles.textblock}>
                             <p className={styles.heading}>Organising events doesn't have to be hard.</p>
                             <p className={styles.subheading}>
@@ -65,12 +64,13 @@ function HomePage(props) {
                         </p>
                         </div>
                     </div>
-                    <div className={`${styles.detail} col-sm-6 order-sm-1 col-12`}>
+                    <div className={`${styles.detail} col-md-6 order-md-1 col-12`}>
                         <img className={`mx-auto d-block ${styles.showcase}`} alt='example' src='./event_reminder.png' width='500px' />
                     </div>
                 </div>
+                <h2 id='premiumFeatures' className={styles.premiumHeader}>Unlock additional features for $5/mo!</h2>
                 <div className={`${styles.content} row`}>
-                    <div className={`${styles.detail} col-sm-6 order-sm-1 col-12`}>
+                    <div className={`${styles.detail} col-md-6 order-md-1 col-12`}>
                         <div className={styles.textblock}>
                             <p className={styles.heading}>Automatic role assigning for attendees.</p>
                             <p className={styles.subheading}>
@@ -78,12 +78,12 @@ function HomePage(props) {
                         </p>
                         </div>
                     </div>
-                    <div className={`${styles.detail} col-sm-6 order-sm-2 col-12`}>
+                    <div className={`${styles.detail} col-md-6 order-md-2 col-12`}>
                         <img className={`mx-auto d-block ${styles.showcase}`} alt='example' src='./roles.png' width='500px' />
                     </div>
                 </div>
                 <div className={`${styles.content} row`}>
-                    <div className={`${styles.detail} col-sm-6 order-sm-2 col-12`}>
+                    <div className={`${styles.detail} col-md-6 order-md-2 col-12`}>
                         <div className={styles.textblock}>
                             <p className={styles.heading}>Automatic expiry of past events.</p>
                             <p className={styles.subheading}>
@@ -92,7 +92,7 @@ function HomePage(props) {
                         </p>
                         </div>
                     </div>
-                    <div className={`${styles.detail} col-sm-6 order-sm-1 col-12`}>
+                    <div className={`${styles.detail} col-md-6 order-md-1 col-12`}>
                         <img className={`mx-auto d-block ${styles.showcase}`} alt='example' src='./expired.png' width='500px' />
                     </div>
                 </div>
