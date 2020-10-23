@@ -286,18 +286,22 @@ client.on('messageReactionAdd', async (reaction, user) => {
 
         if (reaction.emoji.name === 'bin') {
             await event.removeParticipant(user.id);
-            await reactionMember.roles.remove(event.roleId, 'Reacted to event.')
-                .catch(err => console.error('Could not add event role to user', err));
+            if (event.roleId) {
+                await reactionMember.roles.remove(event.roleId, 'Reacted to event.')
+                    .catch(err => console.error('Could not add event role to user', err));
+            }
         } else if (reactAction) {
             await event.addParticipant(user.id, reactAction);
             if (event.roleId) {
                 try {
-                    if (reactAction === 'Going')
+                    if (reactAction === 'Going') {
                         await reactionMember.roles.add(event.roleId, 'Reacted to event.')
                             .catch(err => console.error('Could not add event role to user', err));
-                    else
+                    }
+                    else {
                         await reactionMember.roles.remove(event.roleId, 'Reacted to event.')
                             .catch(err => console.error('Could not remove event role to user', err));
+                    }
                 } catch (err) {
                     if (err.httpStatus !== 404)
                         console.error(`Error fetching member: `, err);
