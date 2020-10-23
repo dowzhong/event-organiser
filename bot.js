@@ -142,7 +142,7 @@ client.on('message', async message => {
         }
 
         try {
-            await utils.edit(event, field, info);
+            await utils.editEvent(event, field, info);
 
             const { allEvents } = utils.getEventsChannels(message.guild);
             if (!allEvents) return;
