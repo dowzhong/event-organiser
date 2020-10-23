@@ -297,7 +297,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
                             .catch(err => console.error('Could not add event role to user', err));
                     else
                         await reactionMember.roles.remove(event.roleId, 'Reacted to event.')
-                            .catch(err => console.error('Could not add event role to user', err));
+                            .catch(err => console.error('Could not remove event role to user', err));
                 } catch (err) {
                     if (err.httpStatus !== 404)
                         console.error(`Error fetching member: `, err);
