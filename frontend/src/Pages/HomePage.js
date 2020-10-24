@@ -55,6 +55,7 @@ function HomePage(props) {
                         <img className={`mx-auto d-block ${styles.showcase}`} alt='example' src='./discord.gif' width='500px' />
                     </div>
                 </div>
+                <h2 id='premiumFeatures' className={styles.premiumHeader}>Unlock additional features for $5/mo!</h2>
                 <div className={`${styles.content} row`}>
                     <div className={`${styles.detail} col-md-6 order-md-2 col-12`}>
                         <div className={styles.textblock}>
@@ -68,7 +69,6 @@ function HomePage(props) {
                         <img className={`mx-auto d-block ${styles.showcase}`} alt='example' src='./event_reminder.png' width='500px' />
                     </div>
                 </div>
-                <h2 id='premiumFeatures' className={styles.premiumHeader}>Unlock additional features for $5/mo!</h2>
                 <div className={`${styles.content} row`}>
                     <div className={`${styles.detail} col-md-6 order-md-1 col-12`}>
                         <div className={styles.textblock}>
