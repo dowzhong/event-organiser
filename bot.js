@@ -253,7 +253,7 @@ client.on('message', async message => {
                 return;
             }
             message.reply('An error occured: ' + err.message);
-            
+
             if (!(err instanceof Discord.DiscordAPIError))
                 console.error(err);
         }
@@ -299,11 +299,17 @@ client.on('messageReactionAdd', async (reaction, user) => {
                 try {
                     if (reactAction === 'Going') {
                         await reactionMember.roles.add(event.roleId, 'Reacted to event.')
-                            .catch(err => console.error('Could not add event role to user', err));
+                            .catch(err => {
+                                if (!(err instanceof Discord.DiscordAPIError))
+                                    console.error('Could not add event role to user', err);
+                            });
                     }
                     else {
                         await reactionMember.roles.remove(event.roleId, 'Reacted to event.')
-                            .catch(err => console.error('Could not remove event role to user', err));
+                            .catch(err => {
+                                if (!(err instanceof Discord.DiscordAPIError))
+                                    console.error('Could not remove event role to user', err);
+                            });
                     }
                 } catch (err) {
                     if (err.httpStatus !== 404)
