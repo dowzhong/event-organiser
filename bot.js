@@ -245,7 +245,7 @@ client.on('message', async message => {
             awaitingMessage.delete(message.author.id);
             utils.deleteEvent({ guildId: message.guild.id, name: eventName }).catch(err => { });
             if (err instanceof Discord.Collection) {
-                message.reply('event creation expired after inactivity.').catch(err => { });
+                message.reply('Event creation expired after inactivity.').catch(err => { });
                 return;
             }
             if (err.name === 'SequelizeUniqueConstraintError') {
