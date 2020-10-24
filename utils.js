@@ -51,9 +51,10 @@ module.exports = {
 
         const eventPost = await event.getEventPost();
 
-        const eventRole = await guild.roles.fetch(event.roleId);
-        console.log(eventRole);
-        if (eventRole) eventRole.delete('Event deleted.').catch(err => { });
+        if (event.roleId) {
+            const eventRole = await guild.roles.fetch(event.roleId);
+            eventRole.delete('Event deleted.').catch(err => { });
+        }
 
         if (eventPost) {
             const { allEvents } = await this.getEventsChannels(guild);
