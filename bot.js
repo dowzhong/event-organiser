@@ -63,7 +63,7 @@ client.on('message', async message => {
         }
 
         const eventId = Number(args[0]);
-        const deleted = await utils.deleteGuildEvent(message.guild, );
+        const deleted = await utils.deleteGuildEvent(message.guild,);
         if (!deleted) {
             message.reply({
                 embed: new MessageEmbed()
@@ -253,7 +253,9 @@ client.on('message', async message => {
                 return;
             }
             message.reply('An error occured: ' + err.message);
-            console.error(err);
+            
+            if (!(err instanceof Discord.DiscordAPIError))
+                console.error(err);
         }
     }
 

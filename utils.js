@@ -130,11 +130,18 @@ module.exports = {
             type: 'text',
             parent: eventsCategory,
             topic: 'All events!',
-            permissionOverwrites: [{
-                id: guild.id,
-                deny: [Permissions.FLAGS.SEND_MESSAGES],
-                type: 'role'
-            }],
+            permissionOverwrites: [
+                {
+                    id: guild.id,
+                    deny: [Permissions.FLAGS.SEND_MESSAGES],
+                    type: 'role'
+                },
+                {
+                    id: guild.me.id,
+                    allow: [Permissions.FLAGS.SEND_MESSAGES],
+                    type: 'member'
+                }
+            ],
             reason: 'Event organiser bot.'
         });
         const eventTalk = await guild.channels.create('event-talk', {
