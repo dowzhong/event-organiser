@@ -63,7 +63,7 @@ client.on('message', async message => {
         }
 
         const eventId = Number(args[0]);
-        const deleted = await utils.deleteGuildEvent(message.guild,);
+        const deleted = await utils.deleteGuildEvent(message.guild, eventId);
         if (!deleted) {
             message.reply({
                 embed: new MessageEmbed()
