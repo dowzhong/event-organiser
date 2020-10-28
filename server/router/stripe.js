@@ -49,8 +49,22 @@ router.post('/create-checkout-session', hasToken, async (req, res) => {
 });
 
 router.post('/customer-portal', hasToken, async (req, res) => {
+    const customer = await database.Customers.findOne({
+        where: {
+            id: req.user.id
+        }
+    });
+
+    if (!customer) {
+        res.json({
+            success: false,
+            content: 'Customer does not exist.'
+        });
+        return;
+    }
+
     const session = await stripe.billingPortal.sessions.create({
-        customer: 'cus_IDaJ3iSNMoDbmA',
+        customer: customer.stripeCustomerId,
         return_url: process.env.FRONTEND + '/manage'
     });
 
