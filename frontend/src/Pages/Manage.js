@@ -52,7 +52,13 @@ function Manage(props) {
 
             window.location = response.body.url;
         } catch (err) {
-            console.error(err);
+            if (err.response) {
+                addToast(err.response.body.content, {
+                    appearance: 'error',
+                    autoDismiss: false,
+                });
+                return;
+            }
         }
     };
 
