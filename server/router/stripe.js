@@ -56,7 +56,7 @@ router.post('/customer-portal', hasToken, async (req, res) => {
     });
 
     if (!customer || !customer.stripeCustomerId) {
-        res.json({
+        res.status(404).json({
             success: false,
             content: 'Customer does not exist.'
         });

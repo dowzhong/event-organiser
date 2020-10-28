@@ -45,11 +45,15 @@ function Manage(props) {
     }, []);
 
     const createPortalSession = async () => {
-        const response = await request
-            .post(process.env.REACT_APP_SERVER + '/stripe/customer-portal')
-            .send({ token: props.context.token });
+        try {
+            const response = await request
+                .post(process.env.REACT_APP_SERVER + '/stripe/customer-portal')
+                .send({ token: props.context.token })
 
-        window.location = response.body.url;
+            window.location = response.body.url;
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     return (
