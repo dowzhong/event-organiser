@@ -272,7 +272,7 @@ client.on('message', async message => {
 });
 
 client.on('messageReactionAdd', async (reaction, user) => {
-    if (user.bot || !reaction.message.guild) return;
+    if (!user || user.bot || !reaction.message.guild) return;
 
     const correspondingEvent = await redis.getAsync(reaction.message.id);
     if (correspondingEvent === null) return;
