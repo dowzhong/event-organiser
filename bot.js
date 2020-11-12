@@ -52,7 +52,7 @@ client.on('message', async message => {
     if (command === 'help') {
         message.channel.send({
             embed: new MessageEmbed()
-                .setDescription('Hey there! You can check out my commands [here](https://event-bot.weeb.tools).')
+                .setDescription('Hey there! You can check out my commands [here](https://event-bot.weeb.tools/commands).')
                 .setColor(config.colors.active)
         }).catch(err => { });
     }
