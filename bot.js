@@ -49,6 +49,14 @@ client.on('message', async message => {
     const args = message.content.split(' ');
     const command = args.shift().toLowerCase().slice(config.prefix.length);
 
+    if (command === 'help') {
+        message.channel.send({
+            embed: new MessageEmbed()
+                .addField('Hey there! Manage your plan and check out my commands:', 'https://event-bot.weeb.tools')
+                .setColor(config.colors.active)
+        }).catch(err => { });
+    }
+
     if (command === 'delete') {
         if (!args.length) {
             await message.reply({
