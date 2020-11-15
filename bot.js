@@ -71,6 +71,15 @@ client.on('message', async message => {
         }
 
         const eventId = Number(args[0]);
+        if (!eventId) {
+            message.reply({
+                embed: new MessageEmbed()
+                    .setDescription(`Invalid event ID: ${eventId}`)
+                    .setColor(config.colors.orangeError)
+            })
+                .catch(err => { });
+            return;
+        }
         const deleted = await utils.deleteGuildEvent(message.guild, eventId);
         if (!deleted) {
             message.reply({
