@@ -26,7 +26,11 @@ client.on('raw', async event => {
 
     if (channel.messages.cache.has(data.message_id)) return;
 
-    const message = await channel.messages.fetch(data.message_id);
+    const message = await channel.messages.fetch(data.message_id).catch(() => null);
+
+    if (!messages) {
+        return;
+    }
 
     const emojiKey = data.emoji.id || data.emoji.name;
     const reaction = message.reactions.cache.get(emojiKey);
