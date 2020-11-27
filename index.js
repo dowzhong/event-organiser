@@ -63,16 +63,13 @@ client.once('ready', async () => {
         });
     });
 
-
-    // TODO: OPTIMIZE MESSAGE FETCH AND DELETE (RATE LIMIT)
-
     schedule.scheduleJob('0 0 * * 5', async () => {
         const events = await utils.getAllEvents({
             expired: true,
             postDeleted: false
         });
 
-        events.forEach(async event => {
+        for (const event of events) {
             const guild = await client.guilds.fetch(event.guildId).catch(err => null);
             if (!guild) return;
 
@@ -87,13 +84,8 @@ client.once('ready', async () => {
 
             if (!postedEvent) return;
 
-            try {
-                await postedEvent.delete({ reason: 'Prune expired events.' });
-                event.postDeleted = true;
-                await event.save();
-            } catch(err) {
-
-            }
-        });
+            await postedEvent.delete({ reason: 'Prune expired events.' })
+                .catch(err => { });
+        }
     });
 });
