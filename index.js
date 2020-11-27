@@ -63,9 +63,13 @@ client.once('ready', async () => {
         });
     });
 
+
+    // TODO: OPTIMIZE MESSAGE FETCH AND DELETE (RATE LIMIT)
+
     schedule.scheduleJob('0 0 * * 5', async () => {
         const events = await utils.getAllEvents({
-            expired: true
+            expired: true,
+            postDeleted: false
         });
 
         events.forEach(async event => {
@@ -83,8 +87,13 @@ client.once('ready', async () => {
 
             if (!postedEvent) return;
 
-            postedEvent.delete({ reason: 'Prune expired events.' })
-                .catch(err => { });
+            try {
+                await postedEvent.delete({ reason: 'Prune expired events.' });
+                event.postDeleted = true;
+                await event.save();
+            } catch(err) {
+
+            }
         });
     });
 });
