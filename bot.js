@@ -28,7 +28,7 @@ client.on('raw', async event => {
 
     const message = await channel.messages.fetch(data.message_id).catch(() => null);
 
-    if (!messages) {
+    if (!message) {
         return;
     }
 
