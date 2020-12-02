@@ -215,7 +215,6 @@ client.on('message', async message => {
                 .catch(err => { });
 
             const filter = msg => msg.author.id === message.author.id
-                && msg.content
                 && utils.validDate(msg.content);
 
             const timeReply = await message.channel.awaitMessages(filter, {
@@ -223,9 +222,13 @@ client.on('message', async message => {
                 time: config.botMessageTimeout,
                 errors: ['time']
             });
-            const timeMsg = timeReply.first().content;
-
-            const date = utils.dateFromString(timeMsg);
+            const timeMsg = timeReply.first();
+            if (!timeMsg) {
+                message.reply('An unknown error occured...please try again.').catch(err => { });
+                return;
+            }
+            const timeMsgContent = timeMsg.content;
+            const date = utils.dateFromString(timeMsgContent);
 
             await message.reply({
                 embed: new MessageEmbed()
