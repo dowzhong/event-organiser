@@ -215,6 +215,7 @@ client.on('message', async message => {
                 .catch(err => { });
 
             const filter = msg => msg.author.id === message.author.id
+                && msg.content
                 && utils.validDate(msg.content);
 
             const timeReply = await message.channel.awaitMessages(filter, {
