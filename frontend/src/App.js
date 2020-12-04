@@ -1,13 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Router, Route, Switch } from 'react-router-dom';
+import { createBrowserHistory } from 'history';
 
 import Context from './Context/Context.js';
 
-import Commands from './Pages/Commands.js'; 
+import Commands from './Pages/Commands.js';
 import HomePage from './Pages/HomePage.js';
-import Manage from './Pages/Manage.js'; 
+import Manage from './Pages/Manage.js';
 
 import request from 'superagent';
+
+const history = createBrowserHistory();
+
+history.listen(location => {
+    if (!window.gtag) {
+        return;
+    }
+    window.gtag('event', 'page_view', {
+        page_location: location.href,
+        page_path: location.pathname + location.search
+    });
+});
 
 function App() {
     const [token, setToken] = useState(null);
@@ -57,13 +70,13 @@ function App() {
             setUser,
             setToken
         }}>
-            <BrowserRouter>
+            <Router history={history}>
                 <Switch>
                     <Route path='/commands' component={Commands} />
                     <Route path='/manage' component={Manage} />
                     <Route path='/' component={HomePage} />
                 </Switch>
-            </BrowserRouter>
+            </Router>
         </Context.Provider >
     );
 }
