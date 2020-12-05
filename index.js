@@ -71,18 +71,18 @@ client.once('ready', async () => {
 
         for (const event of events) {
             const guild = await client.guilds.fetch(event.guildId).catch(err => null);
-            if (!guild) return;
+            if (!guild) { continue; }
 
             const premium = await utils.getGuildPremiumStatus(guild);
 
-            if (!premium) { return; }
+            if (!premium) { continue; }
 
             const { allEvents } = utils.getEventsChannels(guild);
 
             const post = await event.getEventPost();
             const postedEvent = await allEvents.messages.fetch(post.id).catch(err => null);
 
-            if (!postedEvent) return;
+            if (!postedEvent) { continue; }
 
             await postedEvent.delete({ reason: 'Prune expired events.' })
                 .catch(err => { });
