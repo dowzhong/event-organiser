@@ -60,7 +60,11 @@ module.exports = {
             const { allEvents } = await this.getEventsChannels(guild);
             if (allEvents) {
                 const eventMessage = await allEvents.messages.fetch(eventPost.id).catch(err => null);
-                if (eventMessage) eventMessage.delete().catch(err => { });
+                if (eventMessage) {
+                    eventMessage.delete().catch(err => {
+                        console.error('Could not delete event using command:', err);
+                    });
+                }
             }
         }
 
