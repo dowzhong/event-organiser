@@ -42,7 +42,7 @@ client.once('ready', async () => {
 
         events.forEach(async event => {
             const guild = await client.guilds.fetch(event.guildId).catch(err => null);
-            if (!guild) return;
+            if (!guild) { return; }
 
             const premium = await utils.getGuildPremiumStatus(guild);
 
