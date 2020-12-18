@@ -72,12 +72,16 @@ module.exports = {
     },
     async expireEvent(guild, eventId) {
         const event = await this.getEvent({ id: eventId });
-        if (!event) return;
+        if (!event) {
+            return;
+        }
 
         event.expired = true;
         await event.save();
 
-        if (!guild) return;
+        if (!guild) {
+            return;
+        }
 
         try {
             const eventRole = await guild.roles.fetch(event.roleId);
@@ -85,12 +89,19 @@ module.exports = {
         } catch (err) { }
 
         const { allEvents } = this.getEventsChannels(guild);
-        if (!allEvents) return;
+        if (!allEvents) {
+            return;
+        }
 
         const post = await event.getEventPost();
+        if (!postedEvent) {
+            return;
+        }
 
         const postedEvent = await allEvents.messages.fetch(post.id).catch(err => null);
-        if (!postedEvent) return;
+        if (!postedEvent) {
+            return;
+        }
 
         postedEvent.edit({ embed: await this.createEventPost(guild, event) });
         postedEvent.reactions.removeAll();
