@@ -354,8 +354,9 @@ client.on('messageReactionAdd', async (reaction, user) => {
 });
 
 client.on('guildCreate', guild => {
-    if (!guild.owner) return;
-
+    if (!guild.owner) {
+        return;
+    }
     guild.owner.send({
         embed: new MessageEmbed()
             .setDescription(`Hey there! I have just been added to ${guild.name}. `
