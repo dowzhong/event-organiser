@@ -94,7 +94,7 @@ module.exports = {
         }
 
         const post = await event.getEventPost();
-        if (!postedEvent) {
+        if (!post) {
             return;
         }
 
