@@ -21,7 +21,7 @@ module.exports = {
                 id: guild.ownerID
             }
         });
-        if (!customer || !customer.premium) return false;
+        if (!customer || !customer.premium) { return false; }
         return true;
     },
     getGuild(guildId) {
@@ -47,7 +47,7 @@ module.exports = {
         const event = await this.getEvent({
             id: eventId
         });
-        if (!event) return null;
+        if (!event) { return null; }
 
         const eventPost = await event.getEventPost();
 
@@ -264,7 +264,7 @@ module.exports = {
         });
     },
     truncate(string, length = 30) {
-        if (string.length <= length) return string;
+        if (string.length <= length) { return string; }
 
         return string.slice(0, length - 3) + '...';
     },
