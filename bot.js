@@ -279,8 +279,9 @@ client.on('message', async message => {
             }
             message.reply('An error occured: ' + err.message);
 
-            if (!(err instanceof Discord.DiscordAPIError))
+            if (!(err instanceof Discord.DiscordAPIError)) {
                 console.error(err);
+            }
         }
     }
 
