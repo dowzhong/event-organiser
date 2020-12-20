@@ -18,13 +18,13 @@ client.on('ready', async () => {
 });
 
 client.on('raw', async event => {
-    if (!config.rawEvents[event.t]) return;
+    if (!config.rawEvents[event.t]) { return; }
 
     const { d: data } = event;
     const user = client.users.cache.get(data.user_id);
     const channel = client.channels.cache.get(data.channel_id) || await user.createDM();
 
-    if (channel.messages.cache.has(data.message_id)) return;
+    if (channel.messages.cache.has(data.message_id)) { return; }
 
     const message = await channel.messages.fetch(data.message_id).catch(() => null);
 
@@ -167,12 +167,12 @@ client.on('message', async message => {
             await utils.editEvent(event, field, info);
 
             const { allEvents } = utils.getEventsChannels(message.guild);
-            if (!allEvents) return;
+            if (!allEvents) { return; }
 
             const post = await event.getEventPost();
 
             const postedEvent = await allEvents.messages.fetch(post.id);
-            if (!postedEvent) return;
+            if (!postedEvent) { return; }
 
             await postedEvent.edit({ embed: await utils.createEventPost(message.guild, event) });
             message.reply('Event edited.').catch(err => { });
@@ -298,10 +298,10 @@ client.on('message', async message => {
 });
 
 client.on('messageReactionAdd', async (reaction, user) => {
-    if (!user || user.bot || !reaction.message.guild) return;
+    if (!user || user.bot || !reaction.message.guild) { return; }
 
     const correspondingEvent = await redis.getAsync(reaction.message.id);
-    if (correspondingEvent === null) return;
+    if (correspondingEvent === null) { return; }
 
     const event = await utils.getEvent({ id: correspondingEvent, guildId: reaction.message.guild.id });
 

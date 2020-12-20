@@ -37,7 +37,7 @@ function App() {
     }, []);
 
     useEffect(() => {
-        if (!token) return;
+        if (!token) { return; }
 
         request
             .get(process.env.REACT_APP_SERVER + '/getUser')
