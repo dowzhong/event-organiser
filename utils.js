@@ -59,11 +59,13 @@ module.exports = {
         if (eventPost) {
             const { allEvents } = await this.getEventsChannels(guild);
             if (allEvents) {
-                const eventMessage = await allEvents.messages.fetch(eventPost.id).catch(err => null);
+                const eventMessage = await allEvents.messages.fetch(eventPost.id)
+                    .catch(err => null);
                 if (eventMessage) {
-                    eventMessage.delete().catch(err => {
-                        console.error('Could not delete event using command:', err);
-                    });
+                    eventMessage.delete()
+                        .catch(err => {
+                            console.error('Could not delete event using command:', err);
+                        });
                 }
             }
         }
@@ -98,7 +100,8 @@ module.exports = {
             return;
         }
 
-        const postedEvent = await allEvents.messages.fetch(post.id).catch(err => null);
+        const postedEvent = await allEvents.messages.fetch(post.id)
+            .catch(err => null);
         if (!postedEvent) {
             return;
         }
@@ -229,8 +232,10 @@ module.exports = {
         return event.getDataValue('participants').filter(participant => participant.eventParticipants.decision === status);
     },
     async getNicknamesByDecision(guild, event, decision) {
-        const participants = event.getDataValue('participants').filter(participant => participant.eventParticipants.decision === decision);
-        return (await this.getNicknameFromParticipants(guild, participants)).sort();
+        const participants = event.getDataValue('participants')
+            .filter(participant => participant.eventParticipants.decision === decision);
+        return (await this.getNicknameFromParticipants(guild, participants))
+            .sort();
     },
     async getNicknameFromParticipants(guild, participants) {
         const nicknames = await Promise.all(
