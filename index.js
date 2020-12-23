@@ -51,6 +51,9 @@ client.once('ready', async () => {
             const { eventTalk, allEvents } = utils.getEventsChannels(guild);
 
             const post = await event.getEventPost();
+            if (!post) {
+                return;
+            }
             const postedEvent = await allEvents.messages.fetch(post.id).catch(err => null);
 
             const reminder = new MessageEmbed()
@@ -79,10 +82,15 @@ client.once('ready', async () => {
 
             const { allEvents } = utils.getEventsChannels(guild);
 
+            if (!post) {
+                continue;
+            }
             const post = await event.getEventPost();
             const postedEvent = await allEvents.messages.fetch(post.id).catch(err => null);
 
-            if (!postedEvent) { continue; }
+            if (!postedEvent) {
+                continue;
+            }
 
             await postedEvent.delete({ reason: 'Prune expired events.' })
                 .catch(err => { });

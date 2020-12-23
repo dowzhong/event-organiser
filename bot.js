@@ -170,7 +170,7 @@ client.on('message', async message => {
             if (!allEvents) { return; }
 
             const post = await event.getEventPost();
-
+            
             const postedEvent = await allEvents.messages.fetch(post.id);
             if (!postedEvent) { return; }
 
