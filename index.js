@@ -81,11 +81,13 @@ client.once('ready', async () => {
             if (!premium) { continue; }
 
             const { allEvents } = utils.getEventsChannels(guild);
-
+            
+            const post = await event.getEventPost();
+            
             if (!post) {
                 continue;
             }
-            const post = await event.getEventPost();
+            
             const postedEvent = await allEvents.messages.fetch(post.id).catch(err => null);
 
             if (!postedEvent) {
