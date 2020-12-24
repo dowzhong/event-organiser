@@ -234,6 +234,7 @@ module.exports = {
     async getNicknamesByDecision(guild, event, decision) {
         const participants = event.getDataValue('participants')
             .filter(participant => participant.eventParticipants.decision === decision);
+
         return (await this.getNicknameFromParticipants(guild, participants))
             .sort();
     },
@@ -250,9 +251,10 @@ module.exports = {
             const member = await guild.members.fetch(id);
             return member.displayName;
         } catch (err) {
-            if (err.httpStatus === 404)
-                return null;
-            throw err;
+            if (err.httpStatus !== 404) {
+                console.error('Error getting nickname from id:', id);
+            }
+            return null;
         }
     },
     getEventsChannels(guild) {

@@ -170,7 +170,7 @@ client.on('message', async message => {
             if (!allEvents) { return; }
 
             const post = await event.getEventPost();
-            
+
             const postedEvent = await allEvents.messages.fetch(post.id);
             if (!postedEvent) { return; }
 
@@ -329,8 +329,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
                                 if (!(err instanceof Discord.DiscordAPIError))
                                     console.error('Could not add event role to user', err);
                             });
-                    }
-                    else {
+                    } else {
                         await reactionMember.roles.remove(event.roleId, 'Reacted to event.')
                             .catch(err => {
                                 if (!(err instanceof Discord.DiscordAPIError))
