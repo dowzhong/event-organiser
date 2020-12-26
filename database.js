@@ -34,7 +34,9 @@ Events.prototype.deleteParticipant = async function (id, decision) {
     const participant = await Participants.findOne({
         where: { id }
     });
-    if (!participant) { return Event; }
+    if (!participant) {
+        return Event;
+    }
 
     await this.removeParticipant(participant);
     return Events;

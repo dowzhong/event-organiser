@@ -28,6 +28,7 @@ router.post('/create-checkout-session', hasToken, async (req, res) => {
                 }
             ],
             customer_email: req.user.email,
+            allow_promotional_codes: true,
             metadata: {
                 discordId: req.user.id
             },
