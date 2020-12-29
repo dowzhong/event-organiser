@@ -7,6 +7,7 @@ const Discord = require('discord.js');
 const { MessageEmbed } = require('discord.js');
 const { delAsync } = require('./redis.js');
 const database = require('./database.js');
+const { prefix } = require('./config.js');
 
 const client = new Discord.Client();
 
@@ -288,6 +289,14 @@ client.on('message', async message => {
     if (command === 'setutc') {
         try {
             const newUTC = Number(args[0]);
+            if (!newUTC) {
+                return message.reply(
+                    'Invalid UTC input. Please set your offset like:' +
+                    '\n\n' +
+                    '`' + prefix + 'setutc 11`\n' +
+                    '`' + prefix + 'setutc -2`\n'
+                )
+            }
             await utils.setGuildUTCTimezone(message.guild, newUTC);
             message.reply(`This guild is now in UTC${newUTC > 0 ? '+' : ''} ${newUTC} `)
         } catch (err) {
